@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Offset标签计算器 | 光学Shot偏移计算工具 - AzengLab</title>
+<meta name="description" content="面向CF滤光片、光学制程的Offset标签计算器，支持BM1/BM2、Shot X/Y/θ、PCP标签，百分比运算，历史记录本地保存，可导出Markdown记录，支持自定义标签。">
+<meta name="keywords" content="offset计算器,shot偏移计算,光学标签计算,CF滤光片计算工具,PCP偏移,shot θ计算">
+<link rel="canonical" href="https://azenglab.com/calc/offset.html">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"SoftwareApplication",
+  "name":"Offset标签计算器",
+  "description":"面向CF彩色滤光片制程的偏移计算工具，支持自定义标签、百分比运算、历史记录导出MD",
+  "applicationCategory":"CalculatorApplication",
+  "operatingSystem":"Any",
+  "offers":{
+    "@type":"Offer",
+    "price":"0",
+    "priceCurrency":"CNY"
+  }
+}
+</script>
+<style>
+:root {
+  --bg:#f2f3f5;
+  --card:#ffffff;
+  --text:#222222;
+  --text-light:#888888;
+  --border:#dddddd;
+  --btn-bg:#f7f8fa;
+  --btn-active:#e9ebf0;
+  --primary:#4a90e2;
+  --warn:#f7941d;
+  --danger:#c84242;
+  --orange:#f7941d;
+  --gray:#777777;
+}
+.dark {
+  --bg:#1a1a1a;
+  --card:#272727;
+  --text:#eeeeee;
+  --text-light:#aaaaaa;
+  --border:#444444;
+  --btn-bg:#383838;
+  --btn-active:#484848;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,sans-serif;}
+body{background:var(--bg);color:var(--text);padding:16px;min-height:100vh;}
+.wrap{max-width:460px;margin:0 auto;}
+.card{background:var(--card);border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 4px 16px rgba(0,0,0,0.08);}
+.row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:6px;}
+.tag-group-title{font-size:12px;color:var(--text-light);margin:4px 0 3px;}
+.tag{border:none;padding:4px 10px;border-radius:999px;font-size:12px;cursor:pointer;transition:0.15s;display:inline-flex;align-items:center;gap:4px;line-height:1.4;}
+.tag:active{transform:scale(0.96);}
+.tag-l1{background:#eef3fb;color:var(--primary);}
+.tag-l1.active{background:var(--primary);color:#fff;}
+.tag-l2{background:#e6f7ee;color:#2ea44f;}
+.tag-l2.active{background:#2ea44f;color:#fff;}
+.tag-del{font-size:13px;cursor:pointer;opacity:0.75;line-height:1;}
+.tag-del:hover{opacity:1;}
+.input-line{display:flex;gap:6px;margin-top:6px;}
+input{flex:1;padding:7px 9px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-size:13px;}
+button{border:none;padding:7px 11px;border-radius:8px;font-size:13px;cursor:pointer;background:var(--btn-bg);color:var(--text);transition:0.15s;}
+button:active{background:var(--btn-active);}
+.btn-primary{background:var(--primary);color:#fff;}
+.btn-warn{background:var(--warn);color:#fff;}
+.btn-danger{background:var(--danger);color:#fff;}
+.display{text-align:right;padding:12px 10px;min-height:84px;border-bottom:1px dashed var(--border);margin-bottom:12px;}
+.formula{font-size:20px;color:var(--text);min-height:28px;word-break:break-all;overflow-wrap:anywhere;line-height:1.3;}
+.result{font-size:34px;font-weight:bold;margin-top:4px;color:var(--primary);word-break:break-all;overflow-wrap:anywhere;line-height:1.1;}
+.keypad{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.keypad button{padding:16px 0;font-size:20px;font-weight:700;}
+.btn-num{color:#000000;font-weight:700;}
+.btn-op{color:var(--orange);font-weight:700;}
+.btn-clear{color:var(--orange);font-weight:700;}
+.btn-60{color:var(--orange);font-weight:700;}
+.btn-60 .gray{color:var(--gray);}
+.history{max-height:260px;overflow-y:auto;margin-top:8px;border-top:1px solid var(--border);padding-top:10px;}
+.history-item{padding:7px 4px;border-bottom:1px dashed var(--border);font-size:13px;display:flex;justify-content:space-between;align-items:center;gap:8px;}
+.history-item:hover{background:var(--btn-bg);}
+.his-left{flex:1;cursor:pointer;display:flex;align-items:baseline;gap:5px;min-width:0;flex-wrap:wrap;}
+.his-tag-l1{color:var(--primary);font-size:13px;font-weight:600;}
+.his-tag-l2{color:var(--text-light);font-size:12px;}
+.his-mid{display:flex;align-items:baseline;gap:5px;flex-shrink:0;}
+.his-expr{color:var(--text-light);font-size:12px;white-space:nowrap;}
+.his-val{color:var(--primary);font-weight:bold;font-size:15px;white-space:nowrap;}
+.his-del{color:var(--danger);cursor:pointer;padding:2px 4px;}
+.collapse-header{display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-weight:500;margin-bottom:4px;font-size:14px;}
+.collapse-body{overflow:hidden;transition:max-height 0.25s ease;}
+.collapse-body.close{max-height:0px;}
+.tip{font-size:12px;color:var(--text-light);margin-top:6px;line-height:1.5;}
+.top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.edit-toggle{background:transparent;color:var(--primary);font-size:12px;padding:3px 10px;border:1px solid var(--border);border-radius:999px;}
+.edit-toggle.active{background:var(--primary);color:#fff;border-color:var(--primary);}
+.edit-section{margin-top:8px;padding-top:8px;border-top:1px dashed var(--border);}
+.tag-card{padding:12px 14px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="top-bar">
+<h2 style="font-size:18px">Offset 标签计算器</h2>
+<button id="themeBtn">🌓</button>
+</div>
+
+<!-- 标签区域：两级分组 -->
+<div class="card tag-card">
+<div class="collapse-header">
+  <span id="tagPanelHeader">标签面板 ▾</span>
+  <button class="edit-toggle" id="editTagBtn">编辑</button>
+</div>
+<div class="collapse-body" id="tagPanel">
+  <div class="tag-group-title">一级标签</div>
+  <div class="row" id="l1Tags"></div>
+  <div class="tag-group-title" id="l2Title" style="display:none">二级标签</div>
+  <div class="row" id="l2Tags" style="display:none"></div>
+  <div class="edit-section" id="editSection" style="display:none">
+    <div class="input-line">
+      <input id="newL1Input" placeholder="输入一级标签，例如 Shot3">
+      <button class="btn-primary" id="addL1Btn">添加一级</button>
+    </div>
+    <div class="input-line">
+      <input id="newL2Input" placeholder="输入二级标签，例如 X（需先选一级）">
+      <button class="btn-primary" id="addL2Btn">添加二级</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 计算屏幕 -->
+<div class="card">
+<div class="display">
+<div class="formula" id="formula">0</div>
+<div class="result" id="result">0</div>
+</div>
+<div class="keypad">
+<button class="btn-clear" onclick="clearAll()">C</button>
+<button class="btn-op" onclick="inputChar('/')">÷</button>
+<button class="btn-op" onclick="inputChar('*')">×</button>
+<button class="btn-clear" onclick="backspace()">⌫</button>
+
+<button class="btn-num" onclick="inputChar('7')">7</button>
+<button class="btn-num" onclick="inputChar('8')">8</button>
+<button class="btn-num" onclick="inputChar('9')">9</button>
+<button class="btn-op" onclick="inputChar('-')">−</button>
+
+<button class="btn-num" onclick="inputChar('4')">4</button>
+<button class="btn-num" onclick="inputChar('5')">5</button>
+<button class="btn-num" onclick="inputChar('6')">6</button>
+<button class="btn-op" onclick="inputChar('+')">+</button>
+
+<button class="btn-num" onclick="inputChar('1')">1</button>
+<button class="btn-num" onclick="inputChar('2')">2</button>
+<button class="btn-num" onclick="inputChar('3')">3</button>
+<button class="btn-op" onclick="inputChar('%')">%</button>
+
+<button class="btn-num" onclick="inputChar('0')">0</button>
+<button class="btn-num" onclick="inputChar('.')">.</button>
+<button class="btn-60" onclick="calc60()"><span class="gray">×</span>60%</button>
+<button class="btn-warn" onclick="doCalc()">=</button>
+</div>
+</div>
+
+<!-- 历史记录 -->
+<div class="card">
+<div class="row">
+<div style="font-weight:500">历史记录</div>
+<div style="flex:1"></div>
+<button id="editHisBtn">编辑历史</button>
+<button id="exportMdBtn">导出 MD</button>
+</div>
+<div class="history" id="historyBox"></div>
+</div>
+
+<div class="tip">💡 所有标签配置、计算历史仅保存在本机浏览器 localStorage，不上传服务器。键盘支持：数字 +-*/ . 回车计算，退格删除</div>
+</div>
+
+<script>
+// 两级标签树：一级 -> 二级数组
+const DEFAULT_TAG_TREE = {
+  "BM1": ["Shot1 X","Shot1 Y","Shot2 X","Shot2 Y","Shot1 θ","Shot2 θ","PCP"],
+  "BM2": ["Shot1 X","Shot1 Y","Shot2 X","Shot2 Y","Shot1 θ","Shot2 θ","PCP"]
+};
+let tagTree = JSON.parse(JSON.stringify(DEFAULT_TAG_TREE));
+let selectedL1 = null;
+let selectedL2 = null;
+let editMode = false;
+let editHistory = false;
+let expr = "0";
+let historyList = [];
+const MAX_HISTORY = 100;
+
+// DOM
+const formulaEl = document.getElementById("formula");
+const resultEl = document.getElementById("result");
+const l1TagsEl = document.getElementById("l1Tags");
+const l2TagsEl = document.getElementById("l2Tags");
+const l2TitleEl = document.getElementById("l2Title");
+const historyBoxEl = document.getElementById("historyBox");
+const newL1InputEl = document.getElementById("newL1Input");
+const newL2InputEl = document.getElementById("newL2Input");
+const addL1BtnEl = document.getElementById("addL1Btn");
+const addL2BtnEl = document.getElementById("addL2Btn");
+const exportMdBtnEl = document.getElementById("exportMdBtn");
+const editHisBtnEl = document.getElementById("editHisBtn");
+const themeBtnEl = document.getElementById("themeBtn");
+const tagPanelHeaderEl = document.getElementById("tagPanelHeader");
+const tagPanelEl = document.getElementById("tagPanel");
+const editTagBtnEl = document.getElementById("editTagBtn");
+const editSectionEl = document.getElementById("editSection");
+
+// 当前完整标签名
+function currentTag(){
+  if(!selectedL1) return "";
+  return selectedL2 ? selectedL1 + " " + selectedL2 : selectedL1;
+}
+
+// 初始化读取本地存储
+function loadStorage(){
+  const savedTree = localStorage.getItem("azenglab_offset_tagTree");
+  const savedVer = localStorage.getItem("azenglab_offset_ver");
+  const savedHis = localStorage.getItem("azenglab_offset_history");
+  const savedTheme = localStorage.getItem("azenglab_offset_theme");
+  // 版本 v3 起二级标签含 PCP
+  if(savedTree && savedVer === "v3"){
+    try{ tagTree = JSON.parse(savedTree); }catch(e){}
+  }else{
+    tagTree = JSON.parse(JSON.stringify(DEFAULT_TAG_TREE));
+    localStorage.setItem("azenglab_offset_ver", "v3");
+    saveStorage();
+  }
+  if(savedHis){
+    try{ historyList = JSON.parse(savedHis); }catch(e){}
+  }
+  if(savedTheme === "dark") document.body.classList.add("dark");
+}
+function saveStorage(){
+  localStorage.setItem("azenglab_offset_tagTree", JSON.stringify(tagTree));
+  localStorage.setItem("azenglab_offset_history", JSON.stringify(historyList));
+}
+
+// 渲染标签
+function renderTags(){
+  // 一级标签
+  l1TagsEl.innerHTML = "";
+  Object.keys(tagTree).forEach(l1=>{
+    const span = document.createElement("span");
+    span.className = "tag tag-l1 " + (selectedL1===l1?"active":"");
+    let inner = l1;
+    if(editMode) inner += `<span class="tag-del" data-act="del-l1">×</span>`;
+    span.innerHTML = inner;
+    span.onclick = (e)=>{
+      if(e.target.classList.contains("tag-del")){
+        e.stopPropagation();
+        delete tagTree[l1];
+        if(selectedL1===l1){selectedL1=null;selectedL2=null;}
+        saveStorage(); renderTags();
+        return;
+      }
+      selectedL1 = l1;
+      // 若该一级只有一个空二级，则自动选中（如 BM1）
+      const l2list = tagTree[l1];
+      if(l2list.length===1 && l2list[0]===""){
+        selectedL2 = "";
+      }else{
+        selectedL2 = null;
+      }
+      // 点击标签即清零输入，方便直接输入新数值
+      resetInput();
+      renderTags();
+    }
+    l1TagsEl.appendChild(span);
+  })
+
+  // 二级标签
+  if(selectedL1 && tagTree[selectedL1]){
+    l2TitleEl.style.display = "";
+    l2TagsEl.style.display = "";
+    l2TagsEl.innerHTML = "";
+    tagTree[selectedL1].forEach(l2=>{
+      const span = document.createElement("span");
+      span.className = "tag tag-l2 " + (selectedL2===l2?"active":"");
+      const label = l2==="" ? "—" : l2;
+      let inner = label;
+      if(editMode) inner += `<span class="tag-del" data-act="del-l2">×</span>`;
+      span.innerHTML = inner;
+      span.onclick = (e)=>{
+        if(e.target.classList.contains("tag-del")){
+          e.stopPropagation();
+          tagTree[selectedL1] = tagTree[selectedL1].filter(x=>x!==l2);
+          if(tagTree[selectedL1].length===0){
+            delete tagTree[selectedL1];
+            selectedL1 = null;
+          }
+          if(selectedL2===l2) selectedL2=null;
+          saveStorage(); renderTags();
+          return;
+        }
+        selectedL2 = l2;
+        // 点击标签即清零输入，方便直接输入新数值
+        resetInput();
+        renderTags();
+      }
+      l2TagsEl.appendChild(span);
+    })
+  }else{
+    l2TitleEl.style.display = "none";
+    l2TagsEl.style.display = "none";
+  }
+
+  // 编辑区（仅编辑模式显示）
+  editSectionEl.style.display = editMode ? "" : "none";
+  editTagBtnEl.innerText = editMode ? "完成" : "编辑";
+  editTagBtnEl.classList.toggle("active", editMode);
+}
+
+// 渲染历史：左侧一二级标签同一行，中间灰色输入值，右侧蓝色结果
+function renderHistory(){
+  historyBoxEl.innerHTML = "";
+  historyList.forEach((item,idx)=>{
+    const div = document.createElement("div");
+    div.className = "history-item";
+    const l1 = item.l1 || item.tag || "";
+    const l2 = item.l2 || "";
+    div.innerHTML = `
+      <div class="his-left">
+        <span class="his-tag-l1">${l1}</span>
+        <span class="his-tag-l2">${l2}</span>
+      </div>
+      <div class="his-mid">
+        <span class="his-expr">${item.expr||""}</span>
+        <span class="his-val">${item.val}</span>
+      </div>
+      ${editHistory ? '<span class="his-del">×</span>' : ''}
+    `;
+    div.querySelector(".his-left").onclick = ()=>{
+      expr = item.expr;
+      selectedL1 = item.l1 || "";
+      selectedL2 = item.l2 || "";
+      if(!selectedL1) selectedL1 = null;
+      formulaEl.innerText = expr;
+      resultEl.innerText = item.val;
+      renderTags();
+    }
+    const delEl = div.querySelector(".his-del");
+    if(delEl) delEl.onclick = ()=>{
+      historyList.splice(idx,1);
+      saveStorage(); renderHistory();
+    }
+    historyBoxEl.appendChild(div);
+  })
+}
+
+// 表达式求值（处理百分号）
+function evalExpr(e){
+  let s = e.replace(/×/g,"*").replace(/÷/g,"/").replace(/−/g,"-");
+  // 60% -> (60/100)
+  s = s.replace(/(\d*\.?\d+)%/g, "($1/100)");
+  return eval(s);
+}
+
+// 结果格式化：超过3位小数才保留3位，否则按原样显示
+function formatResult(v){
+  if(typeof v !== "number" || !isFinite(v)) return "Error";
+  return String(Number(v.toFixed(3)));
+}
+
+// 输入字符
+function inputChar(c){
+  if(expr === "0") expr = "";
+  // 输入小数点时，若前面为空或为运算符，自动补 0（如 .6 显示为 0.6）
+  if(c === "."){
+    const last = expr.slice(-1);
+    if(expr === "" || /[\+\-\*\/\%]/.test(last)){
+      expr += "0.";
+      formulaEl.innerText = expr;
+      return;
+    }
+  }
+  expr += c;
+  formulaEl.innerText = expr;
+}
+function backspace(){
+  expr = expr.slice(0,-1);
+  if(expr === "") expr = "0";
+  formulaEl.innerText = expr;
+}
+// 仅清零输入与结果，保留标签选中状态
+function resetInput(){
+  expr = "0";
+  formulaEl.innerText = "0";
+  resultEl.innerText = "0";
+}
+function clearAll(){
+  expr = "0";
+  selectedL1 = null;
+  selectedL2 = null;
+  formulaEl.innerText = expr;
+  resultEl.innerText = "0";
+  renderTags();
+}
+function calc60(){
+  try{
+    if(expr === "0" || expr === "") expr = "60%";
+    else expr = expr + "*60%";
+    const v = evalExpr(expr);
+    formulaEl.innerText = expr;
+    resultEl.innerText = formatResult(v);
+  }catch(e){resultEl.innerText="Error"}
+}
+function doCalc(){
+  try{
+    const v = evalExpr(expr);
+    const res = formatResult(v);
+    resultEl.innerText = res;
+    pushHistory(res);
+  }catch(e){resultEl.innerText="Error"}
+}
+function pushHistory(val){
+  if(!selectedL1) return;
+  historyList.unshift({l1:selectedL1, l2:selectedL2||"", expr:expr, val:val});
+  if(historyList.length > MAX_HISTORY) historyList.pop();
+  saveStorage();
+  renderHistory();
+}
+
+// 导出 MD
+function exportMD(){
+  let md = "# Offset计算历史\n";
+  md += `> 导出时间：${new Date().toLocaleString()}\n\n`;
+  md += "| 一级标签 | 二级标签 | 公式 | 结果 |\n";
+  md += "| ---- | ---- | ---- | ---- |\n";
+  historyList.forEach(item=>{
+    const l2 = item.l2 || "";
+    md += `| ${item.l1||item.tag||""} | ${l2} | ${item.expr} | ${item.val} |\n`;
+  })
+  const blob = new Blob([md], {type:"text/markdown"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `offset-history-${new Date().toISOString().slice(0,10)}.md`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// 添加一级标签
+function addL1(){
+  const val = newL1InputEl.value.trim();
+  if(!val) return;
+  if(tagTree[val] !== undefined) return;
+  tagTree[val] = [""];
+  newL1InputEl.value = "";
+  saveStorage();
+  renderTags();
+}
+// 添加二级标签
+function addL2(){
+  const val = newL2InputEl.value.trim();
+  if(!val || !selectedL1) return;
+  if(tagTree[selectedL1].includes(val)) return;
+  // 若当前只有空二级，则替换为空数组后加入新值
+  if(tagTree[selectedL1].length===1 && tagTree[selectedL1][0]===""){
+    tagTree[selectedL1] = [val];
+  }else{
+    tagTree[selectedL1].push(val);
+  }
+  newL2InputEl.value = "";
+  saveStorage();
+  renderTags();
+}
+
+// 折叠面板
+tagPanelHeaderEl.onclick = ()=>{
+  tagPanelEl.classList.toggle("close");
+  tagPanelHeaderEl.innerText = tagPanelEl.classList.contains("close") ? "标签面板 ▸" : "标签面板 ▾";
+}
+
+// 编辑模式切换（右侧按钮）
+editTagBtnEl.onclick = (e)=>{
+  e.stopPropagation();
+  editMode = !editMode;
+  renderTags();
+}
+
+// 主题切换
+themeBtnEl.onclick = ()=>{
+  document.body.classList.toggle("dark");
+  localStorage.setItem("azenglab_offset_theme", document.body.classList.contains("dark") ? "dark":"light");
+}
+
+// 键盘监听
+document.onkeydown = (e)=>{
+  if(e.target.tagName === "INPUT") return;
+  const key = e.key;
+  if(/[0-9\.\+\-\*\/\%]/.test(key)){
+    inputChar(key);
+    e.preventDefault();
+  }else if(key === "Enter"){
+    doCalc(); e.preventDefault();
+  }else if(key === "Backspace"){
+    backspace(); e.preventDefault();
+  }
+}
+
+// 绑定按钮事件
+addL1BtnEl.onclick = addL1;
+newL1InputEl.onkeydown = (e)=>{if(e.key==="Enter") addL1();}
+addL2BtnEl.onclick = addL2;
+newL2InputEl.onkeydown = (e)=>{if(e.key==="Enter") addL2();}
+exportMdBtnEl.onclick = exportMD;
+// 编辑历史切换：进入编辑模式后每条记录才显示删除叉
+editHisBtnEl.onclick = ()=>{
+  editHistory = !editHistory;
+  editHisBtnEl.innerText = editHistory ? "完成" : "编辑历史";
+  editHisBtnEl.style.color = editHistory ? "var(--primary)" : "";
+  editHisBtnEl.style.fontWeight = editHistory ? "700" : "";
+  renderHistory();
+}
+
+// 启动
+loadStorage();
+renderTags();
+renderHistory();
+</script>
+</body>
+</html>
