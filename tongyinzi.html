@@ -80,25 +80,30 @@
       color:#888;
       padding:30px 0;
     }
+    .loading{
+      text-align:center;
+      color:#447;
+      padding:20px;
+    }
   </style>
-  <!-- jsdelivr CDN https，GitHub Pages https 兼容 -->
-  <script src="https://cdn.jsdelivr.net/npm/cnchar@5.1.0/dist/cnchar.min.js"></script>
+  <!-- ✅ 换成国内更容易访问的镜像 -->
+  <script src="https://fastly.jsdelivr.net/npm/cnchar@5.1.0/dist/cnchar.min.js"></script>
 </head>
 <body>
   <div class="title">小学同音字查询</div>
-  <div class="tip">输入汉字（虐） 或者无声调拼音（nve、yao），回车查询</div>
+  <div class="tip">可以输入单个汉字或者拼音来查询，例如：雪、xue，按回车或者点按钮查询，lv 代表 lü</div>
   <div class="search-box">
     <input id="inputVal" placeholder="输入汉字 / 无声调拼音">
     <button id="searchBtn">查询</button>
   </div>
-  <div id="resultWrap"></div>
+  <div id="resultWrap" class="loading">页面加载中...</div>
 
 <script>
 const input = document.getElementById("inputVal");
 const btn = document.getElementById("searchBtn");
 const resultWrap = document.getElementById("resultWrap");
 
-// 释义缓存，你后续慢慢补，没有的字就显示默认
+// 释义缓存，你后续慢慢补
 const dictExplanation = {
   "虐":{pang:"虍",mean:"凶狠",words:"虐待、暴虐"},
   "疟":{pang:"疒",mean:"一种传染病",words:"疟疾"},
@@ -113,7 +118,19 @@ const dictExplanation = {
   "油":{pang:"氵",mean:"油脂",words:"汽油、油水"}
 }
 
+// 兼容转换：用户输入 nve → lv （因为 ü 在拼音库里面是 lv）
+function fixPy(py){
+  py = py.toLowerCase();
+  if(py === "nve") return "lv";
+  return py;
+}
+
 function search(){
+  // 判断cnchar是否加载成功
+  if(typeof cnchar === "undefined"){
+    resultWrap.innerHTML = `<div class="empty">汉字库加载失败，请换网络重试</div>`;
+    return;
+  }
   const val = input.value.trim();
   if(!val) return;
   let resHtml = "";
@@ -122,7 +139,6 @@ function search(){
     const pyList = cnchar.spell(val,"array");
     let allHomophone = new Set();
     pyList.forEach(py=>{
-      // 去掉声调数字
       const purePy = py.replace(/[0-9]/g,"");
       const homArr = cnchar.getHanzi(purePy);
       homArr.forEach(z=>allHomophone.add(z));
@@ -147,8 +163,9 @@ function search(){
       `
     })
   }else{
-    // 输入无声调拼音，清理数字
-    const pinyinRaw = val.toLowerCase().replace(/[0-9]/g,"");
+    // 输入无声调拼音
+    let pinyinRaw = val.toLowerCase().replace(/[0-9]/g,"");
+    pinyinRaw = fixPy(pinyinRaw);
     const hanziArr = cnchar.getHanzi(pinyinRaw);
     if(hanziArr.length === 0){
       resultWrap.innerHTML = `<div class="empty">没有找到这个拼音对应的汉字</div>`;
@@ -170,6 +187,14 @@ function search(){
   }
   resultWrap.innerHTML = resHtml;
 }
+
+// 等待cnchar加载完成
+let waitLoad = setInterval(()=>{
+  if(typeof cnchar !== "undefined"){
+    resultWrap.innerHTML = "";
+    clearInterval(waitLoad);
+  }
+},300);
 
 btn.onclick = search;
 input.onkeydown = (e)=>{
