@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>小学同音字查询</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "霞鹜文楷", sans-serif;
+    }
+    body {
+      background: #f6f8fa;
+      padding: 20px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .title {
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #222;
+    }
+    .tip {
+      color: #666;
+      font-size: 14px;
+      margin-bottom:16px;
+    }
+    .search-box {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    #inputVal {
+      flex: 1;
+      padding: 12px 14px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 18px;
+    }
+    #searchBtn {
+      padding: 12px 18px;
+      background: #2b74d9;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 17px;
+    }
+    .item-card {
+      background: white;
+      padding:16px;
+      border-radius:12px;
+      margin-bottom:12px;
+      box-shadow: 0 2px 6px #00000012;
+    }
+    .zi {
+      font-size: 32px;
+      font-weight:bold;
+      color:#111;
+      display: inline-block;
+      margin-right:12px;
+    }
+    .pinyin {
+      font-size:18px;
+      color:#2b74d9;
+    }
+    .info-line {
+      margin-top:8px;
+      font-size:16px;
+      line-height:1.6;
+    }
+    .label{
+      color:#777;
+    }
+    .empty{
+      text-align:center;
+      color:#888;
+      padding:30px 0;
+    }
+  </style>
+  <!-- jsdelivr CDN https，GitHub Pages https 兼容 -->
+  <script src="https://cdn.jsdelivr.net/npm/cnchar@5.1.0/dist/cnchar.min.js"></script>
+</head>
+<body>
+  <div class="title">小学同音字查询</div>
+  <div class="tip">输入汉字（虐） 或者无声调拼音（nve、yao），回车查询</div>
+  <div class="search-box">
+    <input id="inputVal" placeholder="输入汉字 / 无声调拼音">
+    <button id="searchBtn">查询</button>
+  </div>
+  <div id="resultWrap"></div>
+
+<script>
+const input = document.getElementById("inputVal");
+const btn = document.getElementById("searchBtn");
+const resultWrap = document.getElementById("resultWrap");
+
+// 释义缓存，你后续慢慢补，没有的字就显示默认
+const dictExplanation = {
+  "虐":{pang:"虍",mean:"凶狠",words:"虐待、暴虐"},
+  "疟":{pang:"疒",mean:"一种传染病",words:"疟疾"},
+  "答":{pang:"竹",mean:"回话、应允",words:"答应、回答"},
+  "飘":{pang:"风",mean:"随风移动",words:"飘摇、飘落"},
+  "漂":{pang:"氵",mean:"浮在水面",words:"漂流、漂浮"},
+  "摇":{pang:"扌",mean:"晃动",words:"摇晃、摇动"},
+  "遥":{pang:"辶",mean:"很远",words:"遥远、遥望"},
+  "在":{pang:"土",mean:"处于某个地方",words:"在家、现在"},
+  "再":{pang:"冂",mean:"又一次",words:"再见、再次"},
+  "由":{pang:"丨",mean:"来源",words:"由于、自由"},
+  "油":{pang:"氵",mean:"油脂",words:"汽油、油水"}
+}
+
+function search(){
+  const val = input.value.trim();
+  if(!val) return;
+  let resHtml = "";
+  // 输入单个汉字
+  if(/^[\u4e00-\u9fa5]$/.test(val)){
+    const pyList = cnchar.spell(val,"array");
+    let allHomophone = new Set();
+    pyList.forEach(py=>{
+      // 去掉声调数字
+      const purePy = py.replace(/[0-9]/g,"");
+      const homArr = cnchar.getHanzi(purePy);
+      homArr.forEach(z=>allHomophone.add(z));
+    })
+    allHomophone.delete(val);
+    allHomophone = Array.from(allHomophone);
+    if(allHomophone.length === 0){
+      resultWrap.innerHTML = `<div class="empty">暂时没有找到同音字</div>`;
+      return;
+    }
+    allHomophone.forEach(z=>{
+      const py = cnchar.spell(z);
+      const info = dictExplanation[z] || {pang:"-",mean:"-",words:"-"};
+      resHtml += `
+        <div class="item-card">
+          <span class="zi">${z}</span>
+          <span class="pinyin">${py}</span>
+          <div class="info-line"><span class="label">偏旁：</span>${info.pang}</div>
+          <div class="info-line"><span class="label">释义：</span>${info.mean}</div>
+          <div class="info-line"><span class="label">组词：</span>${info.words}</div>
+        </div>
+      `
+    })
+  }else{
+    // 输入无声调拼音，清理数字
+    const pinyinRaw = val.toLowerCase().replace(/[0-9]/g,"");
+    const hanziArr = cnchar.getHanzi(pinyinRaw);
+    if(hanziArr.length === 0){
+      resultWrap.innerHTML = `<div class="empty">没有找到这个拼音对应的汉字</div>`;
+      return;
+    }
+    hanziArr.forEach(z=>{
+      const py = cnchar.spell(z);
+      const info = dictExplanation[z] || {pang:"-",mean:"-",words:"-"};
+      resHtml += `
+        <div class="item-card">
+          <span class="zi">${z}</span>
+          <span class="pinyin">${py}</span>
+          <div class="info-line"><span class="label">偏旁：</span>${info.pang}</div>
+          <div class="info-line"><span class="label">释义：</span>${info.mean}</div>
+          <div class="info-line"><span class="label">组词：</span>${info.words}</div>
+        </div>
+      `
+    })
+  }
+  resultWrap.innerHTML = resHtml;
+}
+
+btn.onclick = search;
+input.onkeydown = (e)=>{
+  if(e.key === 'Enter') search();
+}
+</script>
+</body>
+</html>
