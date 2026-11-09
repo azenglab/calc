@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>ABCC 轮班日历</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ios: {
+                            bg: '#F2F2F7',
+                            card: '#FFFFFF',
+                            blue: '#007AFF',
+                            green: '#34C759',
+                            orange: '#FF9500',
+                            red: '#FF3B30',
+                            gray: '#8E8E93',
+                            lightGray: '#E5E5EA'
+                        }
+                    },
+                    borderRadius: {
+                        '2xl': '1.25rem',
+                        '3xl': '1.5rem'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background-color: #F2F2F7;
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* Hide scrollbars for crisp native feel */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .safe-pb {
+            padding-bottom: env(safe-area-inset-bottom, 1rem);
+        }
+    </style>
+</head>
+<body class="text-gray-900 min-h-screen flex flex-col justify-between select-none">
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-20 bg-white/80 backdrop-blur-md border-b border-gray-200/80 px-4 py-3">
+        <div class="max-w-md mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 rounded-xl bg-ios-blue text-white flex items-center justify-center font-bold text-sm shadow-sm">
+                    班
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold leading-tight">ABCC 轮班日历</h1>
+                    <p class="text-xs text-gray-500">iOS 风格 · 智能算班</p>
+                </div>
+            </div>
+            <button onclick="openConfigModal()" class="p-2 rounded-full hover:bg-gray-100 text-ios-blue transition-colors flex items-center gap-1 text-xs font-semibold">
+                <i data-lucide="settings-2" class="w-5 h-5"></i>
+                <span>设置</span>
+            </button>
+        </div>
+    </header>
+    <!-- Main Content Area -->
+    <main class="max-w-md mx-auto w-full px-4 pt-4 pb-24 flex-1 space-y-4">
+        <!-- Month Navigation & Stats Card -->
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 space-y-3">
+            <div class="flex items-center justify-between">
+                <button onclick="changeMonth(-1)" class="p-2 rounded-xl text-gray-600 hover:bg-gray-100 active:bg-gray-200 transition">
+                    <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                </button>
+                <div class="text-center cursor-pointer" onclick="jumpToToday()">
+                    <div id="currentMonthStr" class="text-xl font-bold tracking-tight text-gray-900">2026年11月</div>
+                    <div class="text-xs text-ios-blue font-medium mt-0.5">点击回到今天</div>
+                </div>
+                <button onclick="changeMonth(1)" class="p-2 rounded-xl text-gray-600 hover:bg-gray-100 active:bg-gray-200 transition">
+                    <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <!-- Monthly Shift Badges Summary -->
+            <div id="monthStats" class="grid grid-cols-3 gap-2 pt-2 border-t border-gray-100">
+                <!-- Dynamically Generated Stats -->
+            </div>
+        </div>
+        <!-- Calendar Grid Card -->
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+            <!-- Day of Week Headers -->
+            <div class="grid grid-cols-7 mb-2 text-center">
+                <span class="text-xs font-medium text-red-500 py-1">日</span>
+                <span class="text-xs font-medium text-gray-400 py-1">一</span>
+                <span class="text-xs font-medium text-gray-400 py-1">二</span>
+                <span class="text-xs font-medium text-gray-400 py-1">三</span>
+                <span class="text-xs font-medium text-gray-400 py-1">四</span>
+                <span class="text-xs font-medium text-gray-400 py-1">五</span>
+                <span class="text-xs font-medium text-blue-500 py-1">六</span>
+            </div>
+            <!-- Calendar Days -->
+            <div id="calendarGrid" class="grid grid-cols-7 gap-1">
+                <!-- Dynamically populated days -->
+            </div>
+        </div>
+        <!-- Day Detail Card (Hidden by default or shows selected date) -->
+        <div id="dayDetailCard" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex items-center justify-between transition-all">
+            <div class="flex items-center space-x-3">
+                <div id="detailBadge" class="w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-lg text-white shadow-sm">
+                    A
+                </div>
+                <div>
+                    <div id="detailDate" class="text-sm font-semibold text-gray-900">11月8日 周日</div>
+                    <div id="detailName" class="text-xs text-gray-500">早班 (08:00 - 16:00)</div>
+                </div>
+            </div>
+            <div id="detailNote" class="text-xs bg-gray-50 px-3 py-1.5 rounded-xl text-gray-600 font-medium border border-gray-100">
+                正常班次
+            </div>
+        </div>
+        <!-- iOS Calendar Export Banner / Action -->
+        <div class="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl p-4 text-white shadow-md flex items-center justify-between">
+            <div>
+                <h3 class="font-bold text-sm">导入 iPhone 手机日历</h3>
+                <p class="text-xs text-blue-100 mt-0.5">生成 .ics 文件，支持系统自带日历同步</p>
+            </div>
+            <button onclick="exportICS()" class="px-4 py-2 bg-white text-ios-blue text-xs font-bold rounded-xl shadow hover:bg-blue-50 transition active:scale-95">
+                导出 .ics
+            </button>
+        </div>
+    </main>
+    <!-- Bottom Action Bar (Fixed Mobile Friendly) -->
+    <div class="fixed bottom-0 inset-x-0 bg-white/90 backdrop-blur-md border-t border-gray-200 px-4 py-3 safe-pb z-10">
+        <div class="max-w-md mx-auto flex items-center justify-around">
+            <button onclick="openConfigModal()" class="flex flex-col items-center gap-1 text-gray-600 active:text-ios-blue">
+                <i data-lucide="sliders" class="w-5 h-5"></i>
+                <span class="text-[10px] font-medium">排班规则</span>
+            </button>
+            <button onclick="jumpToToday()" class="flex flex-col items-center gap-1 text-gray-600 active:text-ios-blue">
+                <i data-lucide="calendar" class="w-5 h-5"></i>
+                <span class="text-[10px] font-medium">回到今天</span>
+            </button>
+            <button onclick="exportICS()" class="flex flex-col items-center gap-1 text-ios-blue active:opacity-75">
+                <i data-lucide="download" class="w-5 h-5"></i>
+                <span class="text-[10px] font-medium">导出到日历</span>
+            </button>
+        </div>
+    </div>
+    <!-- Shift Config Modal -->
+    <div id="configModal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center opacity-0 pointer-events-none transition-opacity duration-200">
+        <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 space-y-5 transform translate-y-full sm:translate-y-0 transition-transform duration-300 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+                <h2 class="text-lg font-bold">轮班设置</h2>
+                <button onclick="closeConfigModal()" class="p-1 rounded-full text-gray-400 hover:bg-gray-100">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <!-- Base Date Config -->
+            <div class="space-y-2">
+                <label class="text-xs font-semibold text-gray-600 uppercase tracking-wider">轮班基准点 (Cycle Start)</label>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <span class="text-xs text-gray-500 block mb-1">基准日期</span>
+                        <input type="date" id="baseDateInput" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm font-medium focus:outline-none focus:border-ios-blue">
+                    </div>
+                    <div>
+                        <span class="text-xs text-gray-500 block mb-1">该日对应班次</span>
+                        <select id="baseShiftSelect" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm font-medium focus:outline-none focus:border-ios-blue">
+                            <option value="0">第 1 天 (A)</option>
+                            <option value="1">第 2 天 (B)</option>
+                            <option value="2">第 3 天 (C)</option>
+                            <option value="3">第 4 天 (C)</option>
+                        </select>
+                    </div>
+                </div>
+                <p class="text-[11px] text-gray-400">系统将以该日期为推算起点，前后自动延续 ABCC 循环。</p>
+            </div>
+            <!-- Cycle Sequence Editor -->
+            <div class="space-y-2">
+                <label class="text-xs font-semibold text-gray-600 uppercase tracking-wider">轮班周期序列 (逗号分隔)</label>
+                <input type="text" id="cyclePatternInput" value="A,B,C,C" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm font-semibold tracking-widest focus:outline-none focus:border-ios-blue uppercase" placeholder="如: A,B,C,C 或 A,B,C,D">
+            </div>
+            <!-- Shift Details Config -->
+            <div class="space-y-3">
+                <label class="text-xs font-semibold text-gray-600 uppercase tracking-wider">班次类型定义</label>
+                
+                <!-- Shift A -->
+                <div class="flex items-center gap-2 bg-gray-50 p-2.5 rounded-xl border border-gray-100">
+                    <span class="w-7 h-7 rounded-lg bg-blue-500 text-white font-bold flex items-center justify-center text-xs">A</span>
+                    <input type="text" id="shiftA_name" value="早班" class="w-20 text-xs font-medium bg-transparent border-b border-gray-200 focus:outline-none focus:border-ios-blue py-1">
+                    <input type="text" id="shiftA_time" value="08:00 - 16:00" class="flex-1 text-xs text-gray-500 bg-transparent border-b border-gray-200 focus:outline-none focus:border-ios-blue py-1" placeholder="时间段">
+                    <input type="color" id="shiftA_color" value="#3B82F6" class="w-6 h-6 rounded border-0 cursor-pointer">
+                </div>
+                <!-- Shift B -->
+                <div class="flex items-center gap-2 bg-gray-50 p-2.5 rounded-xl border border-gray-100">
+                    <span class="w-7 h-7 rounded-lg bg-amber-500 text-white font-bold flex items-center justify-center text-xs">B</span>
+                    <input type="text" id="shiftB_name" value="晚班" class="w-20 text-xs font-medium bg-transparent border-b border-gray-200 focus:outline-none focus:border-ios-blue py-1">
+                    <input type="text" id="shiftB_time" value="16:00 - 24:00" class="flex-1 text-xs text-gray-500 bg-transparent border-b border-gray-200 focus:outline-none focus:border-ios-blue py-1" placeholder="时间段">
+                    <input type="color" id="shiftB_color" value="#F59E0B" class="w-6 h-6 rounded border-0 cursor-pointer">
+                </div>
+                <!-- Shift C -->
+                <div class="flex items-center gap-2 bg-gray-50 p-2.5 rounded-xl border border-gray-100">
+                    <span class="w-7 h-7 rounded-lg bg-emerald-500 text-white font-bold flex items-center justify-center text-xs">C</span>
+                    <input type="text" id="shiftC_name" value="休息" class="w-20 text-xs font-medium bg-transparent border-b border-gray-200 focus:outline-none focus:border-ios-blue py-1">
+                    <input type="text" id="shiftC_time" value="全天休息" class="flex-1 text-xs text-gray-500 bg-transparent border-b border-gray-200 focus:outline-none focus:border-ios-blue py-1" placeholder="时间段">
+                    <input type="color" id="shiftC_color" value="#10B981" class="w-6 h-6 rounded border-0 cursor-pointer">
+                </div>
+            </div>
+            <!-- Save Action Button -->
+            <button onclick="saveSettings()" class="w-full bg-ios-blue text-white py-3 rounded-2xl font-bold text-sm shadow-md active:scale-98 transition">
+                保存并重新计算
+            </button>
+        </div>
+    </div>
+    <!-- Script Notification Toast -->
+    <div id="toast" class="fixed top-16 left-1/2 transform -translate-x-1/2 bg-gray-900/90 text-white text-xs font-medium px-4 py-2.5 rounded-full shadow-lg backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300 z-50">
+        设置已保存！
+    </div>
+    <script>
+        // Default Configuration
+        let config = {
+            baseDate: '2026-11-01', // ISO YYYY-MM-DD
+            baseIndex: 0,           // Points to pattern[0] -> 'A'
+            pattern: ['A', 'B', 'C', 'C'],
+            shifts: {
+                'A': { name: '早班', time: '08:00-16:00', color: '#3B82F6' },
+                'B': { name: '晚班', time: '16:00-24:00', color: '#F59E0B' },
+                'C': { name: '休息', time: '全天休息', color: '#10B981' }
+            }
+        };
+        // Current View Date state
+        let currentDate = new Date(2026, 10, 1); // Nov 2026 default
+        let selectedDateStr = formatDateKey(new Date());
+        // Initialize App
+        window.onload = function() {
+            lucide.createIcons();
+            loadSettings();
+            
+            // Set default baseDate input to today if none exists
+            if (!localStorage.getItem('shift_config')) {
+                const today = new Date();
+                config.baseDate = formatDateKey(today);
+            }
+            renderCalendar();
+            syncConfigUI();
+        };
+        // LocalStorage Load/Save
+        function loadSettings() {
+            const saved = localStorage.getItem('shift_config');
+            if (saved) {
+                try {
+                    config = JSON.parse(saved);
+                } catch(e) {
+                    console.error('Failed to parse saved config', e);
+                }
+            }
+        }
+        function saveSettings() {
+            const bDate = document.getElementById('baseDateInput').value;
+            const bIdx = parseInt(document.getElementById('baseShiftSelect').value);
+            const patStr = document.getElementById('cyclePatternInput').value.trim();
+            if (!bDate) {
+                showToast('请选择有效的基准日期');
+                return;
+            }
+            const patternArr = patStr.split(',').map(s => s.trim().toUpperCase()).filter(Boolean);
+            if (patternArr.length === 0) {
+                showToast('请输入有效轮班序列');
+                return;
+            }
+            config.baseDate = bDate;
+            config.baseIndex = bIdx % patternArr.length;
+            config.pattern = patternArr;
+            // Save Shift Customizations
+            ['A', 'B', 'C'].forEach(code => {
+                const nameInput = document.getElementById(`shift${code}_name`);
+                const timeInput = document.getElementById(`shift${code}_time`);
+                const colorInput = document.getElementById(`shift${code}_color`);
+                if (nameInput && timeInput && colorInput) {
+                    config.shifts[code] = {
+                        name: nameInput.value || `${code}班`,
+                        time: timeInput.value || '',
+                        color: colorInput.value || '#007AFF'
+                    };
+                }
+            });
+            localStorage.setItem('shift_config', JSON.stringify(config));
+            closeConfigModal();
+            renderCalendar();
+            showToast('排班设定已更新');
+        }
+        function syncConfigUI() {
+            document.getElementById('baseDateInput').value = config.baseDate;
+            document.getElementById('baseShiftSelect').value = config.baseIndex;
+            document.getElementById('cyclePatternInput').value = config.pattern.join(',');
+            ['A', 'B', 'C'].forEach(code => {
+                if (config.shifts[code]) {
+                    document.getElementById(`shift${code}_name`).value = config.shifts[code].name;
+                    document.getElementById(`shift${code}_time`).value = config.shifts[code].time;
+                    document.getElementById(`shift${code}_color`).value = config.shifts[code].color;
+                }
+            });
+        }
+        // Shift Calculation Logic (Core)
+        function getShiftForDate(date) {
+            const base = new Date(config.baseDate + 'T00:00:00');
+            const target = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            // Calculate difference in full calendar days
+            const diffTime = target - base;
+            const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+            const patternLen = config.pattern.length;
+            // Modulo arithmetic supporting negative date differences
+            let patternIndex = (config.baseIndex + (diffDays % patternLen)) % patternLen;
+            if (patternIndex < 0) {
+                patternIndex += patternLen;
+            }
+            const shiftCode = config.pattern[patternIndex];
+            const shiftInfo = config.shifts[shiftCode] || { name: '值班', time: '', color: '#8E8E93' };
+            return {
+                code: shiftCode,
+                name: shiftInfo.name,
+                time: shiftInfo.time,
+                color: shiftInfo.color
+            };
+        }
+        // Render Calendar Grid
+        function renderCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            // Update Header Month Text
+            document.getElementById('currentMonthStr').textContent = `${year}年 ${month + 1}月`;
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+            const firstDayIndex = new Date(year, month, 1).getDay(); // 0 = Sun
+            const totalDays = new Date(year, month + 1, 0).getDate();
+            const todayStr = formatDateKey(new Date());
+            const shiftCounts = {};
+            // Empty Slots for Days Before Month Start
+            for (let i = 0; i < firstDayIndex; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'h-14 rounded-xl border border-transparent';
+                grid.appendChild(emptyCell);
+            }
+            // Fill Month Days
+            for (let day = 1; day <= totalDays; day++) {
+                const dateObj = new Date(year, month, day);
+                const dateKey = formatDateKey(dateObj);
+                const shift = getShiftForDate(dateObj);
+                // Count stats
+                shiftCounts[shift.code] = (shiftCounts[shift.code] || 0) + 1;
+                const isToday = dateKey === todayStr;
+                const isSelected = dateKey === selectedDateStr;
+                const dayCell = document.createElement('div');
+                dayCell.onclick = () => selectDate(dateObj);
+                dayCell.className = `h-14 rounded-2xl p-1 flex flex-col justify-between items-center transition cursor-pointer relative border ${
+                    isSelected ? 'ring-2 ring-ios-blue border-transparent bg-blue-50/50' : 'border-gray-50 hover:bg-gray-50'
+                } ${isToday ? 'bg-amber-50/40' : ''}`;
+                // Day number header
+                const dayNumSpan = document.createElement('span');
+                dayNumSpan.className = `text-xs font-semibold ${isToday ? 'w-5 h-5 rounded-full bg-ios-red text-white flex items-center justify-center font-bold' : 'text-gray-800'}`;
+                dayNumSpan.textContent = day;
+                // Shift Badge
+                const badge = document.createElement('div');
+                badge.className = 'w-full py-0.5 rounded-lg text-[10px] font-bold text-center text-white shadow-2xs truncate px-0.5';
+                badge.style.backgroundColor = shift.color;
+                badge.textContent = `${shift.code}-${shift.name}`;
+                dayCell.appendChild(dayNumSpan);
+                dayCell.appendChild(badge);
+                grid.appendChild(dayCell);
+                // If selected date matches, update details card
+                if (isSelected) {
+                    updateDetailCard(dateObj, shift);
+                }
+            }
+            renderStats(shiftCounts);
+        }
+        // Render Monthly Shift Count Cards
+        function renderStats(counts) {
+            const statsContainer = document.getElementById('monthStats');
+            statsContainer.innerHTML = '';
+            const uniqueCodes = Array.from(new Set(config.pattern));
+            uniqueCodes.forEach(code => {
+                const shift = config.shifts[code] || { name: code, color: '#8E8E93' };
+                const count = counts[code] || 0;
+                const card = document.createElement('div');
+                card.className = 'flex items-center space-x-2 p-2 rounded-xl bg-gray-50 border border-gray-100';
+                card.innerHTML = `
+                    <div class="w-3 h-3 rounded-full flex-shrink-0" style="background-color: ${shift.color}"></div>
+                    <div class="overflow-hidden">
+                        <div class="text-[10px] text-gray-500 font-medium truncate">${shift.name} (${code})</div>
+                        <div class="text-xs font-bold text-gray-900">${count} 天</div>
+                    </div>
+                `;
+                statsContainer.appendChild(card);
+            });
+        }
+        // Interaction Handlers
+        function selectDate(dateObj) {
+            selectedDateStr = formatDateKey(dateObj);
+            const shift = getShiftForDate(dateObj);
+            updateDetailCard(dateObj, shift);
+            renderCalendar();
+        }
+        function updateDetailCard(dateObj, shift) {
+            const dateStr = `${dateObj.getMonth() + 1}月${dateObj.getDate()}日 周${['日','一','二','三','四','五','六'][dateObj.getDay()]}`;
+            
+            document.getElementById('detailBadge').style.backgroundColor = shift.color;
+            document.getElementById('detailBadge').textContent = shift.code;
+            document.getElementById('detailDate').textContent = dateStr;
+            document.getElementById('detailName').textContent = `${shift.name} (${shift.time})`;
+            document.getElementById('detailNote').textContent = `轮班周期第 ${config.pattern.indexOf(shift.code) + 1} 项`;
+        }
+        function changeMonth(delta) {
+            currentDate.setMonth(currentDate.getMonth() + delta);
+            renderCalendar();
+        }
+        function jumpToToday() {
+            currentDate = new Date();
+            selectedDateStr = formatDateKey(currentDate);
+            renderCalendar();
+        }
+        // Modal Controls
+        function openConfigModal() {
+            const modal = document.getElementById('configModal');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.children[0].classList.remove('translate-y-full');
+        }
+        function closeConfigModal() {
+            const modal = document.getElementById('configModal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modal.children[0].classList.add('translate-y-full');
+        }
+        // Helpers
+        function formatDateKey(d) {
+            const y = d.getFullYear();
+            const m = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${y}-${m}-${day}`;
+        }
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 2500);
+        }
+
+        // iCalendar RFC5545 文本转义，处理中文、逗号、换行、分号
+        function icsEscape(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/\\/g, '\\\\')
+                .replace(/;/g, '\\;')
+                .replace(/,/g, '\\,')
+                .replace(/\r?\n/g, '\\n');
+        }
+
+        // iCalendar (.ics) Generator for iOS Calendar Import 【强制UTF‑8字节输出】
+        function exportICS() {
+            let icsContent = [
+                'BEGIN:VCALENDAR',
+                'VERSION:2.0',
+                'PRODID:-//ABCC Shift Calendar//CN',
+                'CALSCALE:GREGORIAN',
+                'METHOD:PUBLISH',
+                'X-WR-CALNAME:ABCC轮班排班表'
+            ];
+            // Generate events for 90 days into the future and 30 days past
+            const startDate = new Date();
+            startDate.setDate(startDate.getDate() - 30);
+            const endDate = new Date();
+            endDate.setDate(endDate.getDate() + 90);
+            let curr = new Date(startDate);
+            while (curr <= endDate) {
+                const shift = getShiftForDate(curr);
+
+                const yyyy = curr.getFullYear();
+                const mm = String(curr.getMonth() + 1).padStart(2, '0');
+                const dd = String(curr.getDate()).padStart(2, '0');
+
+                const dtStart = `${yyyy}${mm}${dd}`;
+
+                // Next day for full‑day event END
+                const nextDay = new Date(curr);
+                nextDay.setDate(nextDay.getDate() + 1);
+                const nYyyy = nextDay.getFullYear();
+                const nMm = String(nextDay.getMonth() + 1).padStart(2, '0');
+                const nDd = String(nextDay.getDate()).padStart(2, '0');
+                const dtEnd = `${nYyyy}${nMm}${nDd}`;
+
+                const summary = icsEscape(`[${shift.code}班] ${shift.name}`);
+                const desc = icsEscape(`班次规则: ${shift.name} (${shift.time})`);
+
+                icsContent.push('BEGIN:VEVENT');
+                icsContent.push(`UID:shift-${dtStart}@abcc-calendar`);
+                icsContent.push(`SUMMARY:${summary}`);
+                icsContent.push(`DESCRIPTION:${desc}`);
+                icsContent.push(`DTSTART;VALUE=DATE:${dtStart}`);
+                icsContent.push(`DTEND;VALUE=DATE:${dtEnd}`);
+                icsContent.push('STATUS:CONFIRMED');
+                icsContent.push('END:VEVENT');
+                curr.setDate(curr.getDate() + 1);
+            }
+            icsContent.push('END:VCALENDAR');
+
+            // 关键：使用TextEncoder输出真正UTF‑8二进制（无BOM，符合iCalendar标准）
+            const rawText = icsContent.join('\r\n');
+            const utf8Bytes = new TextEncoder().encode(rawText);
+            const blob = new Blob([utf8Bytes], { type: 'text/calendar;charset=utf‑8' });
+
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = `ABCC_轮班排班表_${formatDateKey(new Date())}.ics`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showToast('已生成 .ics 文件(纯UTF‑8)，可在 iPhone 上导出！');
+        }
+    </script>
+</body>
+</html>
