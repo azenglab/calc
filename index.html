@@ -3,97 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>工具主页</title>
+    <title>azenglab.com</title>
     <style>
+        :root {
+            --bg-color: #fafafa;
+            --card-bg: #ffffff;
+            --text-main: #111111;
+            --text-sub: #666666;
+            --border-color: #eaeaea;
+            --hover-border: #111111;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #0d1117;
+                --card-bg: #161b22;
+                --text-main: #e6edf3;
+                --text-sub: #8b949e;
+                --border-color: #30363d;
+                --hover-border: #8b949e;
+            }
+        }
+
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
         }
+
         body {
-            background-color: #f5f7fa;
-            padding: 40px 20px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            -webkit-font-smoothing: antialiased;
         }
+
         .container {
-            max-width: 520px;
-            margin: 0 auto;
+            width: 100%;
+            max-width: 580px;
         }
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
+
+        header {
+            margin-bottom: 32px;
+            padding-left: 4px;
         }
-        .header h1 {
-            font-size: 26px;
-            color: #222;
-            margin-bottom: 8px;
-        }
-        .header p {
-            color: #666;
-            font-size: 15px;
-        }
-        .tool-list {
-            display: grid;
-            gap: 14px;
-        }
-        .tool-card {
-            display: block;
-            text-decoration: none;
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 14px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            transition: 0.2s ease;
-        }
-        .tool-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-        }
-        .tool-card h3 {
-            font-size: 19px;
-            color: #222;
+
+        header h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
             margin-bottom: 6px;
         }
-        .tool-card p {
-            font-size: 14px;
-            color: #666;
+
+        header p {
+            font-size: 0.875rem;
+            color: var(--text-sub);
         }
-        .footer {
-            margin-top: 50px;
+
+        .link-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .link-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-main);
+            transition: all 0.2s ease;
+        }
+
+        .link-item:hover {
+            border-color: var(--hover-border);
+            transform: translateY(-1px);
+        }
+
+        .link-title {
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .link-desc {
+            font-size: 0.8rem;
+            color: var(--text-sub);
+        }
+
+        .link-action {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            font-family: monospace;
+        }
+
+        footer {
+            margin-top: 40px;
             text-align: center;
-            color: #999;
-            font-size: 13px;
+            font-size: 0.75rem;
+            color: var(--text-sub);
         }
     </style>
 </head>
 <body>
+
     <div class="container">
-        <div class="header">
-            <h1>个人小工具站</h1>
-            <p>学习 · 打卡 · 辅助工具</p>
+        <header>
+            <h1>azenglab.com</h1>
+            <p>个人学习与日常工具索引</p>
+        </header>
+
+        <div class="link-list">
+            <a href="calculator.html" class="link-item">
+                <div>
+                    <div class="link-title">简易计算器</div>
+                    <div class="link-desc">轻量日常四则运算</div>
+                </div>
+                <div class="link-action">calculator.html</div>
+            </a>
+
+            <a href="tongyinzi.html" class="link-item">
+                <div>
+                    <div class="link-title">同音字查询</div>
+                    <div class="link-desc">汉字快速同音检索</div>
+                </div>
+                <div class="link-action">tongyinzi.html</div>
+            </a>
+
+            <a href="yinianjizuotishizibiao.html" class="link-item">
+                <div>
+                    <div class="link-title">一年级做题识字表</div>
+                    <div class="link-desc">低年级识字练习，支持打印 PDF</div>
+                </div>
+                <div class="link-action">yinianjizuotishizibiao.html</div>
+            </a>
+
+            <a href="lunbanics.html" class="link-item">
+                <div>
+                    <div class="link-title">轮班日历导出</div>
+                    <div class="link-desc">生成 .ics 文件导入手机日历</div>
+                </div>
+                <div class="link-action">lunbanics.html</div>
+            </a>
         </div>
 
-        <div class="tool-list">
-            <!-- 静心抽卡网页 -->
-            <a href="Child Mindful Energy Cards.html" class="tool-card">
-                <h3>静心力量抽卡</h3>
-                <p>每日自省卡片，减少唠叨，陪伴孩子</p>
-            </a>
-            <!-- 同音字查询 -->
-            <a href="tongyinzi.html" class="tool-card">
-                <h3>同音字查询</h3>
-                <p>输入汉字或无声调拼音，辨析小学同音字</p>
-            </a>
-            <!-- 计算器 -->
-            <a href="calculator.html" class="tool-card">
-                <h3>简易计算器</h3>
-                <p>简单计算工具</p>
-            </a>
-        </div>
-
-        <div class="footer">
-            自用学习工具
-        </div>
+        <footer>
+            azenglab &copy; 2026
+        </footer>
     </div>
+
 </body>
 </html>
