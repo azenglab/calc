@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>词根组合与 Google Trends 批查器</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --muted: #64748b;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --accent: #0f172a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .container { max-width: 960px; margin: 0 auto; }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    h1 { font-size: 20px; margin: 0; font-weight: 700; }
+    .sub { font-size: 13px; color: var(--muted); }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    textarea, input[type="text"], select {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    textarea:focus, input[type="text"]:focus, select:focus {
+      border-color: var(--primary);
+    }
+    textarea { resize: vertical; min-height: 120px; }
+    .presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 8px 0 12px;
+    }
+    .chip {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #f1f5f9;
+      color: #334155;
+      cursor: pointer;
+      user-select: none;
+    }
+    .chip:hover { background: #e2e8f0; }
+    .row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 9px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-dark { background: var(--accent); color: #fff; }
+    .btn-dark:hover { opacity: 0.9; }
+    .btn-ghost {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { background: #e2e8f0; }
+    .groups {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .group-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; }
+    .tag {
+      font-size: 12px;
+      background: #eff6ff;
+      color: #1e40af;
+      padding: 3px 9px;
+      border-radius: 6px;
+      font-weight: 500;
+    }
+    .tag.anchor {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    .status { font-size: 12px; color: var(--muted); margin-top: 8px; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>词根组合 &amp; Google Trends 30天批查器</h1>
+    <span class="sub">自动抓 Google 下拉联想词 · 4词+基准词分组直达 Trends</span>
+  </header>
+
+  <div class="grid">
+    <!-- 左侧：词根与种子输入 -->
+    <div class="card">
+      <label for="seeds">1. 种子词 / 核心词（每行一个）</label>
+      <textarea id="seeds" placeholder="例如：&#10;sprunki&#10;block blast&#10;ai image"></textarea>
+
+      <div class="presets">
+        <span class="chip" data-roots="game,online,play,unblocked,simulator,clicker,io">🎮 游戏后缀词根</span>
+        <span class="chip" data-roots="codes,wiki,guide,mod,download,free">📖 攻略/需求词根</span>
+        <span class="chip" data-roots="generator,maker,ai,tool,calculator,checker">🛠️ 工具站词根</span>
+        <span class="chip" data-roots="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z">🔤 A-Z 首字母挖掘</span>
+      </div>
+
+      <label for="roots">2. 组合词根（逗号或换行分隔，可留空）</label>
+      <input type="text" id="roots" value="game,online,play,unblocked,codes" />
+
+      <div class="row">
+        <select id="mode" style="width: auto;">
+          <option value="suffix">种子词 + 词根（后置）</option>
+          <option value="prefix">词根 + 种子词（前置）</option>
+          <option value="both">双向组合</option>
+        </select>
+        <button class="btn-ghost" id="btn-combine">生成组合词</button>
+        <button class="btn-primary" id="btn-suggest">挖掘 Google 下拉新词</button>
+      </div>
+      <div class="status" id="status">提示：点击“挖掘 Google 下拉新词”会通过 Google Autocomplete 拉取最新关联热词。</div>
+    </div>
+
+    <!-- 右侧：待筛词池与 Trends 参数 -->
+    <div class="card">
+      <label for="pool">3. 待筛候选词池（可手动增删，每行一词）</label>
+      <textarea id="pool" style="min-height: 175px;" placeholder="生成或挖掘的候选词会出现在这里..."></textarea>
+
+      <div class="row">
+        <div style="flex: 1; min-width: 140px;">
+          <label for="anchor" style="font-size: 12px; margin-bottom: 3px;">基准锚点词（标尺）</label>
+          <input type="text" id="anchor" value="GPTs" placeholder="如 GPTs 或留空" />
+        </div>
+        <div style="width: 120px;">
+          <label for="geo" style="font-size: 12px; margin-bottom: 3px;">目标地区</label>
+          <select id="geo">
+            <option value="US">美国 (US)</option>
+            <option value="">全球</option>
+            <option value="GB">英国 (GB)</option>
+            <option value="CA">加拿大 (CA)</option>
+          </select>
+        </div>
+        <div style="width: 125px;">
+          <label for="dateRange" style="font-size: 12px; margin-bottom: 3px;">时间范围</label>
+          <select id="dateRange">
+            <option value="today 1-m">过去 30 天</option>
+            <option value="now 7-d">过去 7 天</option>
+            <option value="today 3-m">过去 90 天</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <button class="btn-dark" id="btn-group">生成 Trends 对比分组</button>
+        <button class="btn-ghost" id="btn-copy">复制全部词</button>
+        <button class="btn-ghost" id="btn-clear">清空</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 分组结果区 -->
+  <div class="groups" id="groups"></div>
+</div>
+
+<script>
+  const seedsEl = document.getElementById('seeds');
+  const rootsEl = document.getElementById('roots');
+  const modeEl = document.getElementById('mode');
+  const poolEl = document.getElementById('pool');
+  const anchorEl = document.getElementById('anchor');
+  const geoEl = document.getElementById('geo');
+  const dateRangeEl = document.getElementById('dateRange');
+  const groupsEl = document.getElementById('groups');
+  const statusEl = document.getElementById('status');
+
+  // 预设词根快捷填充
+  document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      rootsEl.value = chip.dataset.roots;
+    });
+  });
+
+  function parseLines(text) {
+    return Array.from(new Set(
+      text.split(/[\n,，]+/).map(s => s.trim()).filter(Boolean)
+    ));
+  }
+
+  function buildCombinations() {
+    const seeds = parseLines(seedsEl.value);
+    const roots = parseLines(rootsEl.value);
+    const mode = modeEl.value;
+    if (!seeds.length) return [];
+
+    const result = new Set(seeds);
+    if (roots.length) {
+      seeds.forEach(seed => {
+        roots.forEach(root => {
+          if (mode === 'suffix' || mode === 'both') result.add(`${seed} ${root}`);
+          if (mode === 'prefix' || mode === 'both') result.add(`${root} ${seed}`);
+        });
+      });
+    }
+    return Array.from(result);
+  }
+
+  document.getElementById('btn-combine').addEventListener('click', () => {
+    const list = buildCombinations();
+    poolEl.value = list.join('\n');
+    statusEl.textContent = `已生成 ${list.length} 个组合词。`;
+  });
+
+  // JSONP 抓取 Google Autocomplete 联想词
+  function fetchGoogleSuggest(query) {
+    return new Promise((resolve) => {
+      const cbName = 'gs_cb_' + Math.random().toString(36).slice(2);
+      const script = document.createElement('script');
+      const timer = setTimeout(() => {
+        cleanup();
+        resolve([]);
+      }, 4000);
+
+      function cleanup() {
+        clearTimeout(timer);
+        delete window[cbName];
+        if (script.parentNode) script.parentNode.removeChild(script);
+      }
+
+      window[cbName] = (data) => {
+        cleanup();
+        const suggestions = Array.isArray(data) && Array.isArray(data[1]) ? data[1] : [];
+        resolve(suggestions);
+      };
+
+      script.src = `https://suggestqueries.google.com/complete/search?client=firefox&hl=en&q=${encodeURIComponent(query)}&callback=${cbName}`;
+      script.onerror = () => {
+        cleanup();
+        resolve([]);
+      };
+      document.body.appendChild(script);
+    });
+  }
+
+  document.getElementById('btn-suggest').addEventListener('click', async () => {
+    const queries = buildCombinations();
+    if (!queries.length) {
+      statusEl.textContent = '请先输入至少一个种子词。';
+      return;
+    }
+    const limited = queries.slice(0, 20); // 单次最多请求20组防止过频
+    statusEl.textContent = `正在挖掘联想词（共 ${limited.length} 组查询）...`;
+
+    const allFound = new Set(parseLines(poolEl.value));
+    for (let i = 0; i < limited.length; i++) {
+      const q = limited[i];
+      statusEl.textContent = `正在挖掘 (${i + 1}/${limited.length}): ${q}`;
+      const items = await fetchGoogleSuggest(q);
+      items.forEach(item => allFound.add(item.trim()));
+      await new Promise(r => setTimeout(r, 120));
+    }
+
+    const finalArr = Array.from(allFound);
+    poolEl.value = finalArr.join('\n');
+    statusEl.textContent = `挖掘完成！当前候选池共 ${finalArr.length} 个词。`;
+  });
+
+  function buildTrendsUrl(words, anchor, geo, dateRange) {
+    const qList = anchor ? [...words, anchor] : words;
+    const params = new URLSearchParams();
+    params.set('date', dateRange);
+    if (geo) params.set('geo', geo);
+    params.set('q', qList.join(','));
+    return `https://trends.google.com/trends/explore?${params.toString()}`;
+  }
+
+  document.getElementById('btn-group').addEventListener('click', () => {
+    const words = parseLines(poolEl.value);
+    const anchor = anchorEl.value.trim();
+    const geo = geoEl.value;
+    const dateRange = dateRangeEl.value;
+
+    groupsEl.innerHTML = '';
+    if (!words.length) {
+      statusEl.textContent = '候选词池为空，请先生成或输入关键词。';
+      return;
+    }
+
+    // 有基准词时每组4词+1基准词=5词；无基准词时每组5词
+    const chunkSize = anchor ? 4 : 5;
+    const chunks = [];
+    for (let i = 0; i < words.length; i += chunkSize) {
+      chunks.push(words.slice(i, i + chunkSize));
+    }
+
+    chunks.forEach((chunk, idx) => {
+      const url = buildTrendsUrl(chunk, anchor, geo, dateRange);
+      const item = document.createElement('div');
+      item.className = 'group-item';
+
+      const tagsHtml = chunk.map(w => `<span class="tag">${escapeHtml(w)}</span>`).join('') +
+        (anchor ? `<span class="tag anchor">基准: ${escapeHtml(anchor)}</span>` : '');
+
+      item.innerHTML = `
+        <div class="tags">
+          <strong style="font-size:12px;color:#64748b;margin-right:4px;">#${idx + 1}</strong>
+          ${tagsHtml}
+        </div>
+        <a href="${url}" target="_blank" rel="noopener" style="text-decoration:none;">
+          <button class="btn-primary" type="button">打开 30天 Trends ↗</button>
+        </a>
+      `;
+      groupsEl.appendChild(item);
+    });
+
+    statusEl.textContent = `已分成 ${chunks.length} 组，点击每组右侧按钮即可一屏对比 5 个词曲线。`;
+  });
+
+  document.getElementById('btn-copy').addEventListener('click', () => {
+    if (!poolEl.value.trim()) return;
+    navigator.clipboard.writeText(poolEl.value.trim());
+    statusEl.textContent = '已复制候选词池全部内容到剪贴板。';
+  });
+
+  document.getElementById('btn-clear').addEventListener('click', () => {
+    poolEl.value = '';
+    groupsEl.innerHTML = '';
+    statusEl.textContent = '已清空。';
+  });
+
+  function escapeHtml(str) {
+    return str.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+  }
+</script>
+</body>
+</html>
