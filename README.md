@@ -10,3 +10,4 @@
 - **同音字查询** (`tongyinzi.html`)：汉字同音检索，辅助写作与学习。
 - **一年级做题识字表** (`yinianjizuotishizibiao.html`)：低年级识字与练习表，支持一键打印 PDF。
 - **轮班日历导出** (`lunbanics.html`)：一键生成 `.ics` 日历文件导入手机。
+- **词根组合与 Trends 批查** (`cigen-trends.html`)：种子词 + 词根批量组合，挖掘 Google 下拉词，按 4+1 分组直达 Trends 对比。
