@@ -1,0 +1,2004 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#DC2626" />
+  <title>家庭应急报警助手 (SOS) - 119/110/120一键呼救、报警话术生成与家庭安全卡通图卡</title>
+  <meta name="description" content="免费离线可用的家庭应急报警辅助工具 (SOS)：支持119火警/110报警/120急救一键直拨、GPS精确定位与地图坐标生成、结构化报警口播稿与家属同步简报、本地加密家庭档案，以及15张绘本风家庭安全卡通图卡。" />
+  <meta name="keywords" content="家庭应急报警助手,SOS,119报警话术,110报警,120急救电话,油锅起火,燃气泄漏,海姆立克急救法,烧烫伤五字诀,家庭安全卡通图卡" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://example.com/sos.html" />
+
+  <!-- Open Graph / 微信与社交分享优化 -->
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="zh_CN" />
+  <meta property="og:title" content="家庭应急报警助手 (SOS) - 关键时刻不慌乱，一键定位与卡通安全图卡" />
+  <meta property="og:description" content="一键直拨119/110/120、自动生成标准报警口播稿与家属简报、离线保存家庭救援档案，内置15张绘本风家庭安全卡通图卡。" />
+  <meta property="og:url" content="https://example.com/sos.html" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="家庭应急报警助手 (SOS) - 一键呼救与卡通安全常识图卡" />
+  <meta name="twitter:description" content="快速抓取定位、生成报警话术、离线保存家庭档案，内含15张绘本风家庭急救常识图卡。" />
+
+  <!-- Schema.org 结构化数据：WebApplication + FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "家庭应急报警助手 (SOS)",
+        "url": "https://example.com/sos.html",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "All",
+        "inLanguage": "zh-CN",
+        "description": "面向家庭场景的应急报警辅助网页工具，提供119/110/120一键直拨、GPS位置速取、标准报警口播稿生成、本地离线家庭档案及15张绘本风家庭安全卡通图卡。",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "CNY"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "家庭油锅起火怎么办？",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "立即关火并沿锅边盖上锅盖或湿毛巾窒息灭火，严禁泼水！水遇热油会瞬间炸开形成火球。"
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "发现家里燃气泄漏怎么处理？",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "立即开窗通风并关闭燃气表前总阀门，撤离到室外空旷安全处再拨打119和燃气抢修电话，严禁在室内开关灯、开抽油烟机或打电话。"
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "拨打119或110报警电话需要说清哪些要素？",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "按地点、险情、被困情况、现场风险特征及联系人电话依次清晰报出，并派人在小区入口接应救援车辆。"
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "烧烫伤如何正确处理？",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "牢记冲、脱、泡、盖、送五字诀：立即用流动冷水冲洗15-30分钟降温，冷水中小心脱去衣物，冷泡15分钟后无菌覆盖送医，切勿涂抹牙膏或酱油。"
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- 引入 Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 引入 Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Noto Sans SC"', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+          },
+          colors: {
+            alarm: {
+              50: '#FEF2F2',
+              100: '#FEE2E2',
+              500: '#EF4444',
+              600: '#DC2626',
+              700: '#B91C1C',
+            },
+            fire: {
+              50: '#FFF7ED',
+              100: '#FFEDD5',
+              500: '#F97316',
+              600: '#EA580C',
+              700: '#C2410C',
+            },
+            med: {
+              50: '#ECFDF5',
+              100: '#D1FAE5',
+              600: '#059669',
+              700: '#047857',
+            },
+            police: {
+              50: '#EFF6FF',
+              100: '#DBEAFE',
+              600: '#2563EB',
+              700: '#1D4ED8',
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* 基础与移动端触控优化 */
+    html, body {
+      background-color: #E2E8F0;
+      color: #0F172A;
+      -webkit-tap-highlight-color: transparent;
+      overscroll-behavior-y: none;
+    }
+
+    /* 隐藏横向滚动条 */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* 按钮触控按压效果 */
+    .btn-press {
+      transition: transform 0.1s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.15s ease;
+      cursor: pointer;
+    }
+    .btn-press:active {
+      transform: scale(0.97);
+    }
+
+    /* 主内容区底部留足 96px 防止被底部导航遮挡 */
+    .main-safe-bottom {
+      padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+    }
+
+    /* 面板切换动画 */
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .panel-animate {
+      animation: fadeSlideUp 0.18s ease-out forwards;
+    }
+
+    /* 绘本风卡片立体阴影 */
+    .storybook-card {
+      box-shadow: 0 5px 0 rgba(15, 23, 42, 0.08), 0 10px 20px -6px rgba(15, 23, 42, 0.12);
+    }
+
+    /* 确保关闭状态的弹窗绝对不阻挡任何点击事件 */
+    .modal-hidden {
+      display: none !important;
+      pointer-events: none !important;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex justify-center selection:bg-alarm-100 selection:text-alarm-700">
+
+  <!-- 移动端优先主容器：最大宽度 480px 居中，桌面端带优雅边框阴影 -->
+  <div id="app-shell" class="w-full max-w-[480px] min-h-screen bg-slate-50 shadow-2xl flex flex-col relative border-x border-slate-300/80">
+
+    <!-- 顶部固定标题与警示栏 -->
+    <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200">
+      <div class="px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-alarm-600 text-white flex items-center justify-center shadow-sm shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 3l7 3v5c0 5.25-3.05 9.74-7 11-3.95-1.26-7-5.75-7-11V6l7-3z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v6M9 11h6"/>
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-base font-black tracking-tight text-slate-900 leading-tight">家庭应急报警助手 (SOS)</h1>
+            <p class="text-[11px] text-slate-500 font-semibold">离线可用 · 本机存储 · 关键时刻不慌乱</p>
+          </div>
+        </div>
+        <button type="button" data-action="switch-tab" data-tab="profile" class="btn-press text-xs font-extrabold px-2.5 py-1.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center gap-1 border border-slate-200">
+          <span class="text-alarm-600">🏠</span>
+          <span>家庭档案</span>
+        </button>
+      </div>
+
+      <!-- 顶部警示提示条 -->
+      <div class="bg-amber-50 border-t border-amber-200/80 px-4 py-1.5 flex items-center gap-2">
+        <span class="text-amber-600 text-xs shrink-0">⚠️</span>
+        <p class="text-[11px] font-bold text-amber-900 leading-snug">
+          紧急情况请<span class="underline decoration-amber-500 decoration-2 font-black">优先直接拨打救援电话</span>，本助手用于快速报清位置与话术。
+        </p>
+      </div>
+    </header>
+
+    <!-- 主内容区（留足底部间距防止导航遮挡） -->
+    <main class="flex-1 px-4 pt-4 main-safe-bottom space-y-5">
+
+      <!-- =================================================================
+           分页 1：一键呼救 (tab-sos)
+      ================================================================== -->
+      <section id="tab-sos" class="tab-panel panel-animate space-y-5">
+
+        <!-- 1. 三大紧急救援大按钮（直拨 + 一键复制号码备用） -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <h2 class="text-sm font-black text-slate-900 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-alarm-600 animate-ping"></span>
+              一键直拨紧急救援
+            </h2>
+            <span class="text-[11px] font-semibold text-slate-500">点击主卡拨号 · 右侧可复制号码</span>
+          </div>
+
+          <!-- 119 火警救援 -->
+          <div class="rounded-2xl bg-gradient-to-r from-alarm-600 to-fire-600 text-white p-3.5 shadow-md shadow-alarm-600/20 border border-alarm-500 flex items-center justify-between gap-2">
+            <a href="tel:119" class="btn-press flex-1 flex items-center gap-3 min-w-0">
+              <div class="w-13 h-13 px-2.5 py-2 rounded-2xl bg-white/20 backdrop-blur-sm flex flex-col items-center justify-center shrink-0">
+                <span class="text-xl font-black tracking-tight leading-none">119</span>
+                <span class="text-[10px] font-extrabold mt-1">火警抢险</span>
+              </div>
+              <div class="min-w-0">
+                <div class="text-base font-black tracking-wide flex items-center gap-1.5">
+                  <span>火警救援中心</span>
+                  <span class="text-[10px] font-extrabold bg-white/20 px-1.5 py-0.5 rounded-full">直拨</span>
+                </div>
+                <p class="text-[11px] text-white/95 mt-0.5 leading-snug">家庭火灾、燃气泄漏、电梯/人员被困</p>
+              </div>
+            </a>
+            <button type="button" data-action="copy-text" data-text="119" data-msg="已复制火警号码 119" class="btn-press shrink-0 px-2.5 py-2 rounded-xl bg-white/20 hover:bg-white/30 text-white text-[11px] font-extrabold border border-white/30">
+              复制号码
+            </button>
+          </div>
+
+          <!-- 110 匪警 & 120 急救 双列卡片 -->
+          <div class="grid grid-cols-2 gap-3">
+            <!-- 110 匪警 -->
+            <div class="rounded-2xl bg-police-600 text-white p-3.5 shadow-md shadow-police-600/15 border border-police-500 flex flex-col justify-between space-y-2.5">
+              <a href="tel:110" class="btn-press block">
+                <div class="flex items-center justify-between mb-1.5">
+                  <span class="text-2xl font-black tracking-tight">110</span>
+                  <span class="w-7 h-7 rounded-full bg-white text-police-600 flex items-center justify-center shadow-sm">
+                    <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.07 21 3 13.93 3 5a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z"/>
+                    </svg>
+                  </span>
+                </div>
+                <div class="text-sm font-black">公安匪警</div>
+                <p class="text-[11px] text-blue-100 mt-0.5 leading-snug">治安突发、盗窃威胁、交通事故</p>
+              </a>
+              <button type="button" data-action="copy-text" data-text="110" data-msg="已复制报警号码 110" class="btn-press w-full py-1.5 rounded-lg bg-white/15 hover:bg-white/25 text-white text-[11px] font-extrabold border border-white/20">
+                复制 110
+              </button>
+            </div>
+
+            <!-- 120 急救 -->
+            <div class="rounded-2xl bg-med-600 text-white p-3.5 shadow-md shadow-med-600/15 border border-med-500 flex flex-col justify-between space-y-2.5">
+              <a href="tel:120" class="btn-press block">
+                <div class="flex items-center justify-between mb-1.5">
+                  <span class="text-2xl font-black tracking-tight">120</span>
+                  <span class="w-7 h-7 rounded-full bg-white text-med-600 flex items-center justify-center shadow-sm">
+                    <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.07 21 3 13.93 3 5a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z"/>
+                    </svg>
+                  </span>
+                </div>
+                <div class="text-sm font-black">医疗急救</div>
+                <p class="text-[11px] text-emerald-100 mt-0.5 leading-snug">突发急病、昏迷外伤、烧烫中毒</p>
+              </a>
+              <button type="button" data-action="copy-text" data-text="120" data-msg="已复制急救号码 120" class="btn-press w-full py-1.5 rounded-lg bg-white/15 hover:bg-white/25 text-white text-[11px] font-extrabold border border-white/20">
+                复制 120
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. 实时定位抓取与地图坐标生成卡片 -->
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-3">
+          <div class="flex items-center justify-between gap-2">
+            <h3 class="text-sm font-black text-slate-900 flex items-center gap-1.5">
+              <span class="w-6 h-6 rounded-lg bg-alarm-50 text-alarm-600 flex items-center justify-center text-xs">📍</span>
+              <span>当前实时定位抓取</span>
+            </h3>
+            <button type="button" id="btn-fetch-gps" data-action="fetch-gps" class="btn-press px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold flex items-center gap-1.5 shadow-sm">
+              <span id="gps-btn-label">一键获取定位</span>
+            </button>
+          </div>
+
+          <div class="rounded-xl bg-slate-50 border border-slate-200 p-3 space-y-2">
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="font-bold text-slate-500">定位状态：</span>
+              <span id="gps-status-tag" class="px-2 py-0.5 rounded bg-slate-200 text-slate-700 font-extrabold">尚未获取</span>
+            </div>
+            <p id="gps-detail-text" class="text-xs font-semibold text-slate-700 leading-relaxed">
+              户外、高速或陌生路段报警时，点击右上角抓取精确经纬度与高德/百度地图坐标链接，方便直接发给救援人员或家属。
+            </p>
+            <div id="gps-action-bar" class="hidden pt-2 border-t border-slate-200 flex items-center justify-between gap-2">
+              <span id="gps-coords-display" class="font-mono text-[11px] font-bold text-slate-700 truncate"></span>
+              <button type="button" data-action="copy-gps" class="btn-press shrink-0 px-2.5 py-1 rounded-lg bg-alarm-600 text-white text-[11px] font-extrabold">
+                复制坐标+链接
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. 预存家庭地址快速展示卡片 -->
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-black text-slate-900 flex items-center gap-1.5">
+              <span>🏠</span>
+              <span>预存家庭详细地址与指引</span>
+            </h3>
+            <button type="button" data-action="switch-tab" data-tab="profile" class="text-xs font-extrabold text-alarm-600 hover:underline">
+              编辑档案 ›
+            </button>
+          </div>
+
+          <div id="sos-saved-address-box" class="rounded-xl bg-amber-50/70 border border-amber-200/80 p-3 space-y-1.5">
+            <!-- JS 动态渲染预存地址与入口指引 -->
+          </div>
+
+          <div class="grid grid-cols-2 gap-2.5">
+            <button type="button" data-action="copy-saved-address" class="btn-press py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold flex items-center justify-center gap-1">
+              <span>📋 复制家庭地址</span>
+            </button>
+            <button type="button" data-action="use-address-in-script" class="btn-press py-2.5 px-3 rounded-xl bg-alarm-50 hover:bg-alarm-100 text-alarm-700 border border-alarm-200 text-xs font-extrabold flex items-center justify-center gap-1">
+              <span>生成报警话术 →</span>
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- =================================================================
+           分页 2：报警话术 (tab-script)
+      ================================================================== -->
+      <section id="tab-script" class="tab-panel hidden space-y-4">
+
+        <!-- 表单点选区 -->
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-4">
+          <div>
+            <h2 class="text-base font-black text-slate-900">点选现场情况（快速生成双模文本）</h2>
+            <p class="text-xs text-slate-500 mt-0.5">按接警员标准要素自动整理，照着念或一键转发</p>
+          </div>
+
+          <!-- ① 险情类型单选 -->
+          <div class="space-y-2">
+            <label class="text-xs font-black text-slate-800 block">① 险情类型（单选）</label>
+            <div id="script-type-options" class="grid grid-cols-2 gap-2">
+              <!-- JS 渲染 -->
+            </div>
+          </div>
+
+          <!-- ② 事发详细地址 -->
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between">
+              <label for="script-address-input" class="text-xs font-black text-slate-800">② 事发地点（精确门牌/路标）</label>
+              <button type="button" data-action="fill-script-address" class="text-[11px] font-extrabold text-alarm-600 hover:underline">
+                填入家庭档案地址
+              </button>
+            </div>
+            <input id="script-address-input" type="text" placeholder="例：XX区XX路阳光花园3栋2单元501室（走南门）" class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm font-semibold text-slate-900 focus:border-alarm-500 focus:ring-2 focus:ring-alarm-500/20 outline-none" />
+          </div>
+
+          <!-- ③ 人员被困/伤亡情况 -->
+          <div class="space-y-2">
+            <label class="text-xs font-black text-slate-800 block">③ 人员被困 / 伤亡情况（单选）</label>
+            <div id="script-trapped-options" class="grid grid-cols-2 gap-2">
+              <!-- JS 渲染 -->
+            </div>
+          </div>
+
+          <!-- ④ 现场关键风险特征（多选） -->
+          <div class="space-y-2">
+            <label class="text-xs font-black text-slate-800 block">④ 现场关键风险特征（可多选）</label>
+            <div id="script-feature-options" class="flex flex-wrap gap-2">
+              <!-- JS 渲染 -->
+            </div>
+          </div>
+
+          <!-- ⑤ 补充细节与联系电话 -->
+          <div class="grid grid-cols-1 gap-2.5">
+            <div>
+              <label for="script-detail-input" class="text-xs font-black text-slate-800 block mb-1">⑤ 补充细节（选填，如接应入口/门禁）</label>
+              <input id="script-detail-input" type="text" placeholder="例：单元门禁密码#1234，家人在小区南门口接应" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-alarm-500 outline-none" />
+            </div>
+            <div>
+              <label for="script-phone-input" class="text-xs font-black text-slate-800 block mb-1">⑥ 现场报警人联系电话（自动带入档案）</label>
+              <input id="script-phone-input" type="tel" placeholder="填写畅通的手机号码" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-alarm-500 outline-none" />
+            </div>
+          </div>
+        </div>
+
+        <!-- 输出 (A)：110/119/120 标准口播稿 -->
+        <div class="rounded-2xl bg-slate-900 text-white p-4 shadow-lg space-y-3 border border-slate-800">
+          <div class="flex items-center justify-between border-b border-slate-700/80 pb-2.5">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded bg-alarm-600 text-white text-[11px] font-black">(A) 标准口播稿</span>
+              <span id="script-target-phone-badge" class="text-xs font-extrabold text-amber-400">建议拨打：119</span>
+            </div>
+            <a id="script-call-now-link" href="tel:119" class="btn-press px-2.5 py-1 rounded-lg bg-alarm-600 hover:bg-alarm-500 text-white text-xs font-black">
+              立即拨号
+            </a>
+          </div>
+
+          <div id="output-spoken-script" class="text-[15px] font-bold leading-relaxed text-slate-50 bg-slate-800/90 rounded-xl p-3.5 border border-slate-700 select-all">
+            <!-- JS 实时生成 -->
+          </div>
+
+          <button type="button" data-action="copy-spoken-script" class="btn-press w-full py-2.5 px-4 rounded-xl bg-white hover:bg-slate-100 text-slate-900 font-black text-xs flex items-center justify-center gap-1.5 shadow">
+            <span>📋 一键复制【标准口播稿】</span>
+          </button>
+        </div>
+
+        <!-- 输出 (B)：家人/物业/安全员同步简报 -->
+        <div class="rounded-2xl bg-white p-4 shadow-sm border-2 border-fire-500/30 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-0.5 rounded-full bg-fire-100 text-fire-700 text-[11px] font-black">(B) 家人 / 物业 / 安全员同步简报</span>
+            <span class="text-[11px] font-semibold text-slate-400">适合一键发微信群</span>
+          </div>
+
+          <pre id="output-family-brief" class="whitespace-pre-wrap font-sans text-xs font-semibold leading-relaxed text-slate-800 bg-fire-50/70 rounded-xl p-3 border border-fire-200/80 select-all"></pre>
+
+          <button type="button" data-action="copy-family-brief" class="btn-press w-full py-2.5 px-4 rounded-xl bg-fire-600 hover:bg-fire-500 text-white font-black text-xs flex items-center justify-center gap-1.5 shadow-sm">
+            <span>📤 一键复制【同步简报】发微信群</span>
+          </button>
+        </div>
+
+      </section>
+
+      <!-- =================================================================
+           分页 3：家庭档案 (tab-profile)
+      ================================================================== -->
+      <section id="tab-profile" class="tab-panel hidden space-y-4">
+
+        <!-- 离线隐私安全提示 -->
+        <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-3.5 flex items-start gap-2.5">
+          <span class="text-emerald-600 text-base shrink-0">🔒</span>
+          <div class="text-xs text-emerald-950 leading-relaxed">
+            <p class="font-black">已启用本机浏览器离线存储</p>
+            <p class="font-medium text-emerald-800 mt-0.5">填写内容自动保存在当前手机本地，无网络也能随时查看或展示给 119/120 救援人员。</p>
+          </div>
+        </div>
+
+        <!-- 档案表单卡片 -->
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+            <h2 class="text-base font-black text-slate-900">家庭应急档案卡</h2>
+            <span id="profile-save-status" class="text-[11px] font-extrabold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">✓ 已保存到本机</span>
+          </div>
+
+          <!-- 1. 家庭详细地址 -->
+          <div class="space-y-1.5">
+            <label for="prof-address" class="text-xs font-black text-slate-800 block">1. 家庭详细地址（精确到栋、单元、楼层、门牌）</label>
+            <input id="prof-address" type="text" placeholder="例：XX市XX区XX街道阳光花园8栋2单元1102室" class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm font-semibold text-slate-900 focus:border-alarm-500 outline-none" />
+          </div>
+
+          <!-- 2. 消防车/救护车最佳入口指引 -->
+          <div class="space-y-1.5">
+            <label for="prof-guide" class="text-xs font-black text-slate-800 block">2. 消防车 / 救护车最佳入口指引</label>
+            <textarea id="prof-guide" rows="2" placeholder="例：走小区南门消防通道（无地锁），进门左转第二栋，单元门禁密码 #2580" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-alarm-500 outline-none"></textarea>
+          </div>
+
+          <!-- 3. 紧急联系人 1 -->
+          <div class="rounded-xl bg-slate-50 border border-slate-200 p-3 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-black text-slate-800">3. 紧急联系人 1（主要家人）</span>
+              <a id="prof-c1-dial" href="tel:" class="hidden btn-press px-2.5 py-1 rounded-lg bg-med-600 text-white text-[11px] font-extrabold">
+                📞 一键拨号
+              </a>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <input id="prof-c1-name" type="text" placeholder="姓名/称呼（如：爸爸）" class="rounded-lg border border-slate-300 bg-white px-2.5 py-2 text-xs font-semibold outline-none focus:border-alarm-500" />
+              <input id="prof-c1-phone" type="tel" placeholder="手机号码" class="rounded-lg border border-slate-300 bg-white px-2.5 py-2 text-xs font-semibold outline-none focus:border-alarm-500" />
+            </div>
+          </div>
+
+          <!-- 4. 紧急联系人 2 -->
+          <div class="rounded-xl bg-slate-50 border border-slate-200 p-3 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-black text-slate-800">4. 紧急联系人 2（备用家人 / 物业）</span>
+              <a id="prof-c2-dial" href="tel:" class="hidden btn-press px-2.5 py-1 rounded-lg bg-med-600 text-white text-[11px] font-extrabold">
+                📞 一键拨号
+              </a>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <input id="prof-c2-name" type="text" placeholder="姓名/称呼（如：物业值班）" class="rounded-lg border border-slate-300 bg-white px-2.5 py-2 text-xs font-semibold outline-none focus:border-alarm-500" />
+              <input id="prof-c2-phone" type="tel" placeholder="电话号码" class="rounded-lg border border-slate-300 bg-white px-2.5 py-2 text-xs font-semibold outline-none focus:border-alarm-500" />
+            </div>
+          </div>
+
+          <!-- 5. 家庭成员特殊医疗/血型/过敏史备注 -->
+          <div class="space-y-1.5">
+            <label for="prof-medical" class="text-xs font-black text-slate-800 block">5. 家庭成员特殊医疗 / 血型 / 过敏史备注</label>
+            <textarea id="prof-medical" rows="3" placeholder="例：老人有高血压史（速效救心丸在客厅茶几第一格抽屉）；儿童青霉素过敏；A型血。" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm text-slate-900 leading-relaxed focus:border-alarm-500 outline-none"></textarea>
+          </div>
+
+          <!-- 保存与导出按钮组 -->
+          <div class="grid grid-cols-2 gap-2.5 pt-1">
+            <button type="button" data-action="save-profile-explicit" class="btn-press py-3 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-black flex items-center justify-center gap-1 shadow">
+              <span>💾 保存档案到本机</span>
+            </button>
+            <button type="button" data-action="export-profile-text" class="btn-press py-3 px-3 rounded-xl bg-alarm-600 hover:bg-alarm-500 text-white text-xs font-black flex items-center justify-center gap-1 shadow">
+              <span>📋 导出完整档案文本</span>
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- =================================================================
+           分页 4：常识卡片 (tab-tips) —— 15张绘本风卡通插画安全图卡
+      ================================================================== -->
+      <section id="tab-tips" class="tab-panel hidden space-y-4">
+
+        <!-- 顶部分类筛选栏 -->
+        <div class="sticky top-[93px] z-20 bg-slate-50/95 backdrop-blur py-2 -mx-4 px-4 border-b border-slate-200/80 space-y-2">
+          <div class="flex items-center justify-between">
+            <h2 class="text-sm font-black text-slate-900 flex items-center gap-1.5">
+              <span>🎨</span>
+              <span>家庭安全卡通图卡</span>
+            </h2>
+            <span class="text-[11px] font-bold text-slate-500">点击「大图海报」可截图发家庭群</span>
+          </div>
+          <div id="tips-filter-bar" class="flex items-center gap-2 overflow-x-auto no-scrollbar">
+            <!-- JS 渲染：全部(15)、火灾逃生(4)、燃气用电(3)、家庭急救(5)、居家防护(3) -->
+          </div>
+        </div>
+
+        <!-- 15张卡通图卡列表容器 -->
+        <div id="tips-cards-list" class="grid grid-cols-1 gap-4">
+          <!-- JS 渲染 -->
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- 底部固定 4 栏导航栏（高度 68px，z-index: 50，确保100%可点击无遮挡） -->
+    <nav id="bottom-nav" class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] h-[68px] bg-white/98 backdrop-blur-md border-t border-slate-200 z-50 shadow-[0_-4px_20px_rgba(15,23,42,0.08)]">
+      <div class="grid grid-cols-4 h-full">
+        <button type="button" data-action="switch-tab" data-tab="sos" id="nav-sos" class="nav-btn btn-press flex flex-col items-center justify-center gap-1 text-alarm-600 font-black">
+          <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+          </svg>
+          <span class="text-[11px] pointer-events-none">一键呼救</span>
+        </button>
+
+        <button type="button" data-action="switch-tab" data-tab="script" id="nav-script" class="nav-btn btn-press flex flex-col items-center justify-center gap-1 text-slate-500 font-bold">
+          <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+          <span class="text-[11px] pointer-events-none">报警话术</span>
+        </button>
+
+        <button type="button" data-action="switch-tab" data-tab="profile" id="nav-profile" class="nav-btn btn-press flex flex-col items-center justify-center gap-1 text-slate-500 font-bold">
+          <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+          <span class="text-[11px] pointer-events-none">家庭档案</span>
+        </button>
+
+        <button type="button" data-action="switch-tab" data-tab="tips" id="nav-tips" class="nav-btn btn-press flex flex-col items-center justify-center gap-1 text-slate-500 font-bold">
+          <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+          </svg>
+          <span class="text-[11px] pointer-events-none">常识卡片</span>
+        </button>
+      </div>
+    </nav>
+
+  </div>
+
+  <!-- 全局轻提示 Toast（绝不使用阻塞式 alert） -->
+  <div id="toast-box" class="fixed top-20 left-1/2 -translate-x-1/2 z-[70] pointer-events-none transition-all duration-200 opacity-0 -translate-y-2">
+    <div class="bg-slate-900/95 text-white text-xs font-extrabold px-4 py-2.5 rounded-full shadow-xl flex items-center gap-2 border border-slate-700">
+      <span class="text-emerald-400">✓</span>
+      <span id="toast-msg">已复制到剪贴板</span>
+    </div>
+  </div>
+
+  <!-- 全屏长图海报弹窗 Modal（关闭时彻底隐藏且 pointer-events: none） -->
+  <div id="poster-modal" data-action="close-modal-backdrop" class="modal-hidden fixed inset-0 z-[60] bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-3.5">
+    <div class="bg-white w-full max-w-[430px] max-h-[92vh] overflow-y-auto rounded-3xl shadow-2xl border-4 border-slate-900 flex flex-col">
+      <!-- 弹窗顶部栏 -->
+      <div class="sticky top-0 z-10 bg-white/95 backdrop-blur px-4 py-2.5 border-b border-slate-100 flex items-center justify-between">
+        <span class="text-xs font-black text-slate-600">📸 手机截图即可转发老人与家庭群</span>
+        <button type="button" data-action="close-modal" class="btn-press w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-900 font-black flex items-center justify-center text-sm" aria-label="关闭海报">
+          ✕
+        </button>
+      </div>
+
+      <!-- 海报主体内容 -->
+      <div id="poster-modal-content" class="p-4 space-y-3.5">
+        <!-- JS 动态注入海报 -->
+      </div>
+
+      <!-- 弹窗底部大号关闭按钮 -->
+      <div class="p-4 pt-0">
+        <button type="button" data-action="close-modal" class="btn-press w-full py-3 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-black">
+          关闭海报返回卡片列表
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      /* ===================================================================
+         1. 状态与常量配置
+      =================================================================== */
+      const STORAGE_KEY = 'family_sos_assistant_v2';
+
+      const DEFAULT_PROFILE = {
+        address: '',
+        guide: '',
+        c1Name: '',
+        c1Phone: '',
+        c2Name: '',
+        c2Phone: '',
+        medical: ''
+      };
+
+      let profileState = loadProfileFromStorage();
+      let gpsState = {
+        lat: null,
+        lng: null,
+        accuracy: null,
+        coordText: '',
+        mapUrl: ''
+      };
+
+      // 报警话术配置
+      const INCIDENT_TYPES = [
+        { id: 'fire', label: '🔥 火灾起火', call: '119', phrase: '发生火灾起火' },
+        { id: 'gas', label: '💨 燃气泄漏', call: '119', phrase: '发生燃气泄漏' },
+        { id: 'medical', label: '🚑 突发疾病/外伤', call: '120', phrase: '有人突发急病或严重外伤' },
+        { id: 'security', label: '🚨 治安求助', call: '110', phrase: '遇到入室盗窃或治安突发危险' },
+        { id: 'traffic', label: '🚗 交通事故', call: '110', phrase: '发生交通事故' }
+      ];
+
+      const TRAPPED_OPTIONS = [
+        { id: 'none', label: '无人员被困', phrase: '目前无人员被困' },
+        { id: 'trapped', label: '有人员被困', phrase: '有人员被困急需救援' },
+        { id: 'injured', label: '有人员受伤出血/昏迷', phrase: '有人员受伤出血或昏迷急需救治' },
+        { id: 'unknown', label: '不确定', phrase: '现场是否有人被困暂不确定' }
+      ];
+
+      const RISK_FEATURES = [
+        '明火浓烟',
+        '燃气味重',
+        '有老人/儿童',
+        '楼层较高',
+        '电梯停运',
+        '道路拥堵',
+        '已切断电源气阀'
+      ];
+
+      let scriptState = {
+        typeId: 'fire',
+        trappedId: 'none',
+        features: [],
+        address: '',
+        detail: '',
+        phone: ''
+      };
+
+      let activeTipCategory = '全部';
+
+      /* ===================================================================
+         2. 15张绘本风卡通 SVG 场景插画库（马卡龙暖色调 + 圆润线条）
+      =================================================================== */
+      function renderCartoonSVG(key) {
+        const svgs = {
+          // 1. 油锅起火
+          'pot-fire': `
+            <svg viewBox="0 0 300 140" class="w-full h-36 block">
+              <rect width="300" height="140" rx="18" fill="#FFF7ED"/>
+              <circle cx="52" cy="34" r="22" fill="#FFEDD5"/>
+              <rect x="36" y="102" width="136" height="14" rx="7" fill="#475569"/>
+              <path d="M54 72 Q104 98 154 72 Z" fill="#1E293B"/>
+              <rect x="150" y="68" width="44" height="8" rx="4" fill="#334155"/>
+              <path d="M88 72 C84 52, 98 44, 96 30 C106 38, 110 50, 106 72 Z" fill="#F97316"/>
+              <path d="M106 72 C103 56, 116 48, 114 36 C122 44, 125 54, 120 72 Z" fill="#EF4444"/>
+              <path d="M98 72 C96 60, 105 55, 104 46 C109 52, 111 60, 108 72 Z" fill="#FACC15"/>
+              <path d="M56 34 Q104 14 152 34 Z" fill="#CBD5E1" stroke="#334155" stroke-width="2.5"/>
+              <circle cx="104" cy="21" r="5" fill="#334155"/>
+              <path d="M104 38 L104 52 M98 46 L104 52 L110 46" stroke="#16A34A" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <circle cx="238" cy="66" r="32" fill="#FEE2E2" stroke="#DC2626" stroke-width="3.5"/>
+              <path d="M238 47 C238 47 225 63 225 71 A13 13 0 0 0 251 71 C251 63 238 47 238 47 Z" fill="#38BDF8"/>
+              <line x1="216" y1="44" x2="260" y2="88" stroke="#DC2626" stroke-width="4.5" stroke-linecap="round"/>
+              <text x="238" y="114" text-anchor="middle" font-size="11" font-weight="900" fill="#DC2626">严禁泼水</text>
+            </svg>`,
+
+          // 2. 浓烟火场逃生
+          'smoke-escape': `
+            <svg viewBox="0 0 300 140" class="w-full h-36 block">
+              <rect width="300" height="140" rx="18" fill="#F1F5F9"/>
+              <path d="M16 26 Q56 10 96 26 T176 26 T256 26 L284 26 L284 46 Q234 58 184 44 T84 44 T16 46 Z" fill="#64748B" opacity="0.45"/>
+              <circle cx="92" cy="74" r="12" fill="#FDBA74" stroke="#334155" stroke-width="2.2"/>
+              <rect x="95" y="74" width="12" height="9" rx="3.5" fill="#FFFFFF" stroke="#0284C7" stroke-width="2"/>
+              <path d="M86 86 Q76 98 64 102 M86 88 L102 98 L114 114 M76 98 L62 114" stroke="#2563EB" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <rect x="148" y="58" width="60" height="26" rx="7" fill="#16A34A"/>
+              <text x="178" y="75" text-anchor="middle" font-size="11" font-weight="900" fill="#FFFFFF">走楼梯出口→</text>
+              <rect x="226" y="48" width="46" height="64" rx="7" fill="#E2E8F0" stroke="#475569" stroke-width="2"/>
+              <line x1="249" y1="48" x2="249" y2="112" stroke="#64748B" stroke-width="2"/>
+              <circle cx="249" cy="80" r="23" fill="none" stroke="#DC2626" stroke-width="3.5"/>
+              <line x1="232" y1="63" x2="266" y2="97" stroke="#DC2626" stroke-width="3.5"/>
+              <text x="249" y="126" text-anchor="middle" font-size="10.5" font-weight="900" fill="#DC2626">勿乘电梯</text>
+            </svg>`,
+
+          // 3. 门把手发烫怎么办
+          'hot-door': `
+            <svg viewBox="0 0 300 140" class="w-full h-36 block">
+              <rect width="300" height="140" rx="18" fill="#FEF2F2"/>
+              <rect x="38" y="20" width="84" height="98" rx="8" fill="#FED7AA" stroke="#9A3412" stroke-width="2.5"/>
+              <circle cx="106" cy="70" r="7" fill="#EF4444"/>
+              <path d="M98 54 Q106 46 114 54" stroke="#DC2626" stroke-width="2.5" fill="none"/>
+              <rect x="44" y="110" width="72" height="8" rx="4" fill="#38BDF8"/>
+              <text x="80" y="131" text-anchor="middle" font-size="10.5" font-weight="900" fill="#0369A1">湿毛巾堵门缝</text>
+              <rect x="164" y="26" width="96" height="88" rx="12" fill="#FFFFFF" stroke="#EF4444" stroke-width="2.2"/>
+              <text x="212" y="49" text-anchor="middle" font-size="11.5" font-weight="900" fill="#DC2626">✋ 手背先测温</text>
+              <text x="212" y="71" text-anchor="middle" font-size="11.5" font-weight="900" fill="#B45309">🚪 发烫别开门</text>
+              <text x="212" y="93" text-anchor="middle" font-size="11.5" font-weight="900" fill="#15803D">🪟 窗口挥衣求救</text>
+            </svg>`,
+
+          // 4. 灭火器提拔握压
+          'extinguisher': `
+            <svg viewBox="0 0 300 140" class="w-full h-36 block">
+              <rect width="300" height="140" rx="18" fill="#FFF1F2"/>
+              <rect x="52" y="44" width="44" height="68" rx="15" fill="#DC2626" stroke="#7F1D1D" stroke-width="2.5"/>
+              <rect x="65" y="31" width="18" height="13" rx="3" fill="#334155"/>
+              <path d="M65 34 L42 27 M69 37 L44 39" stroke="#334155" stroke-width="3.5" stroke-linecap="round"/>
+              <circle cx="88" cy="35" r="5" fill="none" stroke="#FACC15" stroke-width="2.5"/>
+              <path d="M52 60 Q28 56 22 72" stroke="#1E293B" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+              <rect x="60" y="64" width="28" height="24" rx="4" fill="#FFFFFF"/>
+              <text x="74" y="80" text-anchor="middle" font-size="10" font-weight="900" fill="#DC2626">干粉</text>
+              <rect x="134" y="22" width="136" height="96" rx="14" fill="#FFFFFF" stroke="#DC2626" stroke-width="2.2"/>
+              <text x="202" y="44" text-anchor="middle" font-size="12" font-weight="900" fill="#DC2626">1. 提：提起灭火器</text>
+              <text x="202" y="65" text-anchor="middle" font-size="12" font-weight="900" fill="#B45309">2. 拔：拔掉保险销</text>
+              <text x="202" y="86" text-anchor="middle" font-size="12" font-weight="900" fill="#0369A1">3. 握：握住喷管前端</text>
+              <text x="202" y="107" text-anchor="middle" font-size="12" font-weight="900" fill="#15803D">4. 压：对准火焰根部</text>
+            </svg>`,
+
+          // 5. 发现燃气泄漏
+          'gas-leak': `
+            <svg viewBox="0 0 300 140" class="w-full h-36 block">
+              <rect width="300" height="140" rx="18" fill="#EFF6FF"/>
+              <rect x="28" y="26" width="70" height="72" rx="8" fill="#BAE6FD" stroke="#0284C7" stroke-width="2.5"/>
+              <line x1="63" y1="26" x2="63" y2="98" stroke="#0284C7" stroke-width="2"/>
+              <path d="M40 54 Q64 46 88 54 M40 70 Q64 62 88 70" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+              <text x="63" y="118" text-anchor="middle" font-size="11" font-weight="900" fill="#0369A1">1.开窗通风</text>
+              <rect x="142" y="24" width="14" height="76" rx="5" fill="#F59E0B" stroke="#B45309" stroke-width="2"/>
+              <rect x="130" y="56" width="38" height="11" rx="4" fill="#DC2626" stroke="#7F1D1D" stroke-width="2"/>
+              <text x="149" y="118" text-anchor="middle" font-size="11" font-weight="900" fill="#B45309">2.关总阀门</text>
+              <circle cx="238" cy="62" r="30" fill="#FEE2E2" stroke="#DC2626" stroke-width="3.5"/>
+              <rect x="227" y="49" width="22" height="26" rx="4" fill="#FFFFFF" stroke="#475569" stroke-width="2"/>
+              <line x1="217" y1="41" x2="259" y2="83" stroke="#DC2626" stroke-width="4.2"/>
+              <text x="238" y="118" text-anchor="middle" font-size="11" font-weight="900" fill="#DC2626">3.禁开关电器</text>
+            </svg>`,
+
+          // 6. 电器/电动车起火
+          'electric-ebike': `
+            <svg viewBox="0 0 300 140" class="w-full h-36 block">
+              <rect width="300" height="140" rx="18" fill="#FEFCE8"/>
+              <rect x="34" y="24" width="80" height="86" rx="10" fill="#E2E8F0" stroke="#334155" stroke-width="2.5"/>
+              <rect x="48" y="38" width="52" height="46" rx="6" fill="#FFFFFF" stroke="#94A3B8" stroke-width="2"/>
+              <rect x="64" y="60" width="20" height="14" rx="3" fill="#EF4444"/>
+              <path d="M92 44 L92 74 M86 68 L92 74 L98 68" stroke="#16A34A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <text x="74" y="126" text-anchor="middle" font-size="11" font-weight="900" fill="#1E293B">先拉总闸断电</text>
+              <circle cx="176" cy="86" r="13" fill="none" stroke="#1E293B" stroke-width="3.5"/>
+              <circle cx="222" cy="86" r="13" fill="none" stroke="#1E293B" stroke-width="3.5"/>
+              <path d="M176 86 L192 66 L214 66 L222 86 M192 66 L188 50 L202 50" stroke="#2563EB" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <circle cx="199" cy="68" r="34" fill="rgba(254,226,226,0.55)" stroke="#DC2626" stroke-width="3.8"/>
+              <line x1="175" y1="44" x2="223" y2="92" stroke="#DC2626" stroke-width="4.2"/>
+              <text x="199" y="126" text-anchor="middle" font-size="11" font-weight="900" fill="#DC2626">电池严禁入户充电</text>
+            </svg>`,
+
+          // 7. 冬季防一氧化碳中毒
+          'co-poison': `
+            <svg viewBox="0 0 300 140" class="w-full h-36 block">
+              <rect width="300" height="140" rx="18" fill="#F0FDF4"/>
+              <rect x="34" y="38" width="56" height="72" rx="10" fill="#FFFFFF" stroke="#475569" stroke-width="2.5"/>
+              <circle cx="62" cy="70" r="11" fill="#FEF3C7" stroke="#D97706" stroke-width="2"/>
+              <path d="M62 38 L62 18 L136 18" stroke="#64748B" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <text x="62" y="126" text-anchor="middle" font-size="11" font-weight="900" fill="#334155">热水器烟道通室外</text>
+              <circle cx="208" cy="64" r="36" fill="#DCFCE7" stroke="#16A34A" stroke-width="2.8"/>
+              <path d="M185 57 Q208 46 231 57 M185 71 Q208 60 231 71" stroke="#16A34A" stroke-width="3.8" stroke-linecap="round" fill="none"/>
+              <text x="208" y="122" text-anchor="middle" font-size="11" font-weight="900" fill="#15803D">留缝通风防中毒</text>
+            </svg>`,
+
+          // 8. 海姆立克急救法
+          'heimlich': `
+            <svg viewBox="0 0 300 140" class="w-full h-36 block">
+              <rect width="300" height="140" rx="18" fill="#ECFDF5"/>
+              <circle cx="128" cy="36" r="13" fill="#FDBA74" stroke="#334155" stroke-width="2"/>
+              <path d="M112 54 Q128 50 144 54 L148 106 L108 106 Z" fill="#60A5FA" stroke="#2563EB" stroke-width="2"/>
+              <circle cx="96" cy="30" r="13" fill="#FDBA74" stroke="#334155" stroke-width="2"/>
+              <path d="M78 48 Q96 44 108 50 L108 110 L76 110 Z" fill="#10B981" stroke="#059669" stroke-width="2"/>
+              <path d="M90 68 Q120 78 136 74" stroke="#FDBA74" stroke-width="7.5" stroke-linecap="round" fill="none"/>
+              <circle cx="134" cy="74" r="6.5" fill="#EF4444"/>
+              <path d="M134 65 L125 52 M125 59 L125 52 L132 52" stroke="#DC2626" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <rect x="172" y="26" width="104" height="86" rx="14" fill="#FFFFFF" stroke="#10B981" stroke-width="2.2"/>
+              <text x="224" y="49" text-anchor="middle" font-size="11.5" font-weight="900" fill="#047857">✌️ 剪刀：脐上两指</text>
+              <text x="224" y="72" text-anchor="middle" font-size="11.5" font-weight="900" fill="#047857">✊ 石头：握拳顶住</text>
+              <text x="224" y="95" text-anchor="middle" font-size="11.5" font-weight="900" fill="#DC2626">🖐 布：向内上冲击</text>
+            </svg>`,
+
+          // 9. 烧烫伤五字诀
+          'scald-care': `
+            <svg viewBox="0 0 300 140" class="w-full h-36 block">
+              <rect width="300" height="140" rx="18" fill="#EFF6FF"/>
+              <path d="M36 34 L82 34 Q96 34 96 48 L96 54" stroke="#64748B" stroke-width="10" stroke-linecap="round" fill="none"/>
+              <rect x="54" y="23" width="24" height="7" rx="3.5" fill="#0284C7"/>
+              <path d="M91 56 Q87 76 91 96 M101 56 Q105 76 101 96" stroke="#38BDF8" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+              <path d="M46 88 L134 88" stroke="#FDBA74" stroke-width="15" stroke-linecap="round"/>
+              <text x="90" y="122" text-anchor="middle" font-size="11" font-weight="900" fill="#0369A1">流动冷水冲15-30分钟</text>
+              <circle cx="226" cy="62" r="30" fill="#FEE2E2" stroke="#DC2626" stroke-width="3.5"/>
+              <rect x="215" y="47" width="22" height="30" rx="4" fill="#FFFFFF" stroke="#475569" stroke-width="2"/>
+              <text x="226" y="65" text-anchor="middle" font-size="10" font-weight="900" fill="#334155">牙膏</text>
+              <line x1="204" y1="40" x2="248" y2="84" stroke="#DC2626" stroke-width="4.2"/>
+              <text x="226" y="122" text-anchor="middle" font-size="11" font-weight="900" fill="#DC2626">严禁涂牙膏酱油</text>
+            </svg>`,
+
+          // 10. 流鼻血正确处理
+          'nosebleed': `
+            <svg viewBox="0 0 300 140" class="w-full h-36 block">
+              <rect width="300" height="140" rx="18" fill="#FFF7ED"/>
+              <circle cx="88" cy="50" r="19" fill="#FDBA74" stroke="#334155" stroke-width="2.2"/>
+              <path d="M76 74 L100 74 L108 110 L68 110 Z" fill="#10B981" stroke="#059669" stroke-width="2"/>
+              <path d="M114 40 Q126 48 122 64 M117 58 L122 64 L127 58" stroke="#16A34A" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <text x="90" y="127" text-anchor="middle" font-size="11" font-weight="900" fill="#15803D">✓ 前倾捏鼻翼10分钟</text>
+              <circle cx="222" cy="58" r="28" fill="#FEE2E2" stroke="#DC2626" stroke-width="3.5"/>
+              <text x="222" y="62" text-anchor="middle" font-size="11.5" font-weight="900" fill="#991B1B">仰头塞纸</text>
+              <line x1="202" y1="38" x2="242" y2="78" stroke="#DC2626" stroke-width="4.2"/>
+              <text x="222" y="127" text-anchor="middle" font-size="11" font-weight="900" fill="#DC2626">✕ 勿仰头防血液呛咳</text>
+            </svg>`,
+
+          // 11. 成人心肺复苏 CPR
+          'cpr': `
+            <svg viewBox="0 0 300 140" class="w-full h-36 block">
+              <rect width="300" height="140" rx="18" fill="#FEF2F2"/>
+              <circle cx="54" cy="90" r="13" fill="#FDBA74" stroke="#334155" stroke-width="2"/>
+              <rect x="72" y="82" width="98" height="24" rx="12" fill="#93C5FD" stroke="#2563EB" stroke-width="2"/>
+              <path d="M118 34 L118 70" stroke="#FDBA74" stroke-width="11" stroke-linecap="round"/>
+              <path d="M100 44 L100 66 M94 60 L100 66 L106 60" stroke="#DC2626" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <rect x="186" y="24" width="94" height="90" rx="14" fill="#FFFFFF" stroke="#EF4444" stroke-width="2.2"/>
+              <text x="233" y="48" text-anchor="middle" font-size="11" font-weight="900" fill="#DC2626">两乳头连线中点</text>
+              <text x="233" y="72" text-anchor="middle" font-size="13.5" font-weight="900" fill="#1E293B">100~120次/分</text>
+              <text x="233" y="95" text-anchor="middle" font-size="11.5" font-weight="800" fill="#475569">按压深度 5~6cm</text>
+            </svg>`,
+
+          // 12. 儿童防溺水与急救
+          'drowning': `
+            <svg viewBox="0 0 300 140" class="w-full h-36 block">
+              <rect width="300" height="140" rx="18" fill="#E0F2FE"/>
+              <path d="M18 88 Q48 76 78 88 T138 88 L138 118 L18 118 Z" fill="#38BDF8"/>
+              <circle cx="78" cy="58" r="24" fill="#FFFFFF" stroke="#EF4444" stroke-width="6"/>
+              <line x1="61" y1="41" x2="95" y2="75" stroke="#EF4444" stroke-width="5"/>
+              <text x="78" y="131" text-anchor="middle" font-size="10.5" font-weight="900" fill="#0369A1">远离无护栏水域</text>
+              <rect x="156" y="22" width="124" height="94" rx="14" fill="#FFFFFF" stroke="#0284C7" stroke-width="2.2"/>
+              <text x="218" y="45" text-anchor="middle" font-size="11.5" font-weight="900" fill="#DC2626">⏱️ 抢抓黄金 4 分钟</text>
+              <text x="218" y="67" text-anchor="middle" font-size="11" font-weight="900" fill="#1E293B">1. 清除口鼻泥沙异物</text>
+              <text x="218" y="88" text-anchor="middle" font-size="11" font-weight="900" fill="#0369A1">2. 先吹气2次再按压</text>
+              <text x="218" y="107" text-anchor="middle" font-size="10.5" font-weight="800" fill="#64748B">切勿倒背控水延误时间</text>
+            </svg>`,
+
+          // 13. 地震避险黄金三角
+          'earthquake': `
+            <svg viewBox="0 0 300 140" class="w-full h-36 block">
+              <rect width="300" height="140" rx="18" fill="#FEFCE8"/>
+              <rect x="38" y="44" width="110" height="11" rx="5" fill="#B45309"/>
+              <rect x="46" y="55" width="9" height="58" fill="#92400E"/>
+              <rect x="131" y="55" width="9" height="58" fill="#92400E"/>
+              <circle cx="92" cy="82" r="12" fill="#FDBA74" stroke="#334155" stroke-width="2"/>
+              <path d="M78 96 Q94 90 108 100 L110 113 L74 113 Z" fill="#2563EB"/>
+              <rect x="168" y="24" width="108" height="90" rx="14" fill="#FFFFFF" stroke="#D97706" stroke-width="2.2"/>
+              <text x="222" y="48" text-anchor="middle" font-size="12.5" font-weight="900" fill="#B45309">1. 伏地蹲下</text>
+              <text x="222" y="72" text-anchor="middle" font-size="12.5" font-weight="900" fill="#B45309">2. 遮挡头颈</text>
+              <text x="222" y="96" text-anchor="middle" font-size="12.5" font-weight="900" fill="#B45309">3. 手抓牢桌腿</text>
+            </svg>`,
+
+          // 14. 台风暴雨居家防护
+          'typhoon': `
+            <svg viewBox="0 0 300 140" class="w-full h-36 block">
+              <rect width="300" height="140" rx="18" fill="#EFF6FF"/>
+              <rect x="36" y="24" width="80" height="80" rx="8" fill="#DBEAFE" stroke="#1D4ED8" stroke-width="3"/>
+              <line x1="40" y1="28" x2="112" y2="100" stroke="#F59E0B" stroke-width="4.5"/>
+              <line x1="112" y1="28" x2="40" y2="100" stroke="#F59E0B" stroke-width="4.5"/>
+              <line x1="76" y1="26" x2="76" y2="102" stroke="#F59E0B" stroke-width="4.5"/>
+              <line x1="38" y1="64" x2="114" y2="64" stroke="#F59E0B" stroke-width="4.5"/>
+              <text x="76" y="124" text-anchor="middle" font-size="11" font-weight="900" fill="#1E40AF">玻璃贴“米”字胶带</text>
+              <rect x="138" y="26" width="138" height="84" rx="14" fill="#FFFFFF" stroke="#3B82F6" stroke-width="2.2"/>
+              <text x="207" y="51" text-anchor="middle" font-size="11.5" font-weight="900" fill="#1D4ED8">🪴 收回阳台花盆杂物</text>
+              <text x="207" y="74" text-anchor="middle" font-size="11.5" font-weight="900" fill="#1D4ED8">🔦 备好饮用水与手电</text>
+              <text x="207" y="97" text-anchor="middle" font-size="11.5" font-weight="900" fill="#DC2626">⚡ 远离积水与路灯杆</text>
+            </svg>`,
+
+          // 15. 儿童防坠楼与误食
+          'child-safety': `
+            <svg viewBox="0 0 300 140" class="w-full h-36 block">
+              <rect width="300" height="140" rx="18" fill="#FDF2F8"/>
+              <rect x="34" y="24" width="84" height="78" rx="8" fill="#E0F2FE" stroke="#0284C7" stroke-width="2.5"/>
+              <line x1="55" y1="24" x2="55" y2="102" stroke="#475569" stroke-width="3"/>
+              <line x1="76" y1="24" x2="76" y2="102" stroke="#475569" stroke-width="3"/>
+              <line x1="97" y1="24" x2="97" y2="102" stroke="#475569" stroke-width="3"/>
+              <text x="76" y="123" text-anchor="middle" font-size="11" font-weight="900" fill="#0369A1">装防护栏 · 移走垫脚物</text>
+              <rect x="142" y="24" width="134" height="86" rx="14" fill="#FFFFFF" stroke="#DB2777" stroke-width="2.2"/>
+              <text x="209" y="48" text-anchor="middle" font-size="11.5" font-weight="900" fill="#BE185D">💊 药品/洗涤剂高处锁好</text>
+              <text x="209" y="71" text-anchor="middle" font-size="11.5" font-weight="900" fill="#DC2626">🥤 勿用饮料瓶装清洁剂</text>
+              <text x="209" y="94" text-anchor="middle" font-size="11.5" font-weight="900" fill="#15803D">🪟 窗台旁不放沙发凳子</text>
+            </svg>`
+        };
+
+        return svgs[key] || svgs['pot-fire'];
+      }
+
+      /* ===================================================================
+         3. 15张家庭安全常识卡片数据库（严格对应 4 个分类）
+      =================================================================== */
+      const SAFETY_CARDS = [
+        // --- 火灾逃生 (4) ---
+        {
+          id: 'card-1',
+          category: '火灾逃生',
+          badgeStyle: 'bg-orange-100 text-orange-800',
+          artKey: 'pot-fire',
+          title: '1. 油锅起火怎么办',
+          mantra: '关火盖锅盖，严禁泼水！',
+          doList: [
+            '立即关闭燃气灶开关或切断电源。',
+            '沿锅边平稳盖上锅盖，或用拧干的湿大毛巾完全覆盖窒息灭火。',
+            '等锅体完全冷却后再揭开锅盖检查。'
+          ],
+          dontList: [
+            '严禁用水泼！水遇高温热油会瞬间炸开形成火球引燃整间厨房。',
+            '不要端着着火的油锅往外跑，极易烫伤自己并引燃沿途物品。'
+          ]
+        },
+        {
+          id: 'card-2',
+          category: '火灾逃生',
+          badgeStyle: 'bg-orange-100 text-orange-800',
+          artKey: 'smoke-escape',
+          title: '2. 浓烟火场逃生',
+          mantra: '湿毛巾捂口鼻，低姿匍匐不坐电梯',
+          doList: [
+            '用折叠 8 层的湿毛巾捂住口鼻，弯腰低姿贴近地面沿疏散楼梯撤离。',
+            '逃生时随手关闭身后防火门，阻挡浓烟向楼梯间蔓延。',
+            '安全撤到室外空旷处后再清点人数并拨打 119。'
+          ],
+          dontList: [
+            '严禁乘坐普通电梯逃生，火灾断电会被困在轿厢内。',
+            '切勿贪恋手机、钱包等财物折返火场。'
+          ]
+        },
+        {
+          id: 'card-3',
+          category: '火灾逃生',
+          badgeStyle: 'bg-orange-100 text-orange-800',
+          artKey: 'hot-door',
+          title: '3. 门把手发烫怎么办',
+          mantra: '测温不盲目开门，堵门缝窗口求救',
+          doList: [
+            '开门前先用手背轻触门把手：若发烫或门缝冒烟，说明门外已大火，切勿开门！',
+            '退回有外窗的房间，用打湿的毛巾、床单死死塞住门缝并不断泼水降温。',
+            '在窗口挥舞鲜艳衣物、打手电或敲击金属发出声响等待消防员救援。'
+          ],
+          dontList: [
+            '门把手发烫时千万不要贸然拉开门，高温浓烟会在 1 秒内涌入室内。',
+            '三楼以上切勿盲目跳楼。'
+          ]
+        },
+        {
+          id: 'card-4',
+          category: '火灾逃生',
+          badgeStyle: 'bg-orange-100 text-orange-800',
+          artKey: 'extinguisher',
+          title: '4. 灭火器提拔握压',
+          mantra: '提灭火器、拔保险销、握喷管、压把手对准根部',
+          doList: [
+            '提：提起灭火器快速赶到距火源 2~3 米的上风处。',
+            '拔：用力拔掉手柄处的金属保险销（铅封）。',
+            '握与压：一只手握紧喷管前端，另一只手用力压下压把，对准火焰根部左右扫射。'
+          ],
+          dontList: [
+            '不要只对着火焰上方喷射，必须瞄准燃烧物根部。',
+            '使用二氧化碳灭火器时手不要直接抓金属喇叭筒，防止低温冻伤。'
+          ]
+        },
+
+        // --- 燃气用电 (3) ---
+        {
+          id: 'card-5',
+          category: '燃气用电',
+          badgeStyle: 'bg-sky-100 text-sky-800',
+          artKey: 'gas-leak',
+          title: '5. 发现燃气泄漏',
+          mantra: '开窗通风关阀门，严禁开关灯和打电话',
+          doList: [
+            '屏住呼吸，迅速打开门窗形成空气对流。',
+            '立即关闭燃气表前总阀门（阀门手柄与管道垂直为关闭）。',
+            '迅速撤离到室外空旷安全处后，再拨打 119 和燃气公司抢修电话。'
+          ],
+          dontList: [
+            '严禁在室内开关任何电器（包括开灯、关灯、开抽油烟机、按门铃），微小电火花即可引爆燃气！',
+            '不要在室内拨打或接听手机，不要用打火机查漏。'
+          ]
+        },
+        {
+          id: 'card-6',
+          category: '燃气用电',
+          badgeStyle: 'bg-sky-100 text-sky-800',
+          artKey: 'electric-ebike',
+          title: '6. 电器/电动车起火',
+          mantra: '先断总闸再灭火，切勿直接用水浇',
+          doList: [
+            '电器着火第一时间拉下入户配电箱总电闸断电，随后用干粉灭火器或厚棉被覆盖扑救。',
+            '电动车严格在室外集中充电棚充电，使用原装充电器。'
+          ],
+          dontList: [
+            '未断电前绝对禁止用水或泡沫灭火器泼浇，防止发生触电事故。',
+            '严禁把电动车或锂电池带进电梯、楼道或家里充电。'
+          ]
+        },
+        {
+          id: 'card-7',
+          category: '燃气用电',
+          badgeStyle: 'bg-sky-100 text-sky-800',
+          artKey: 'co-poison',
+          title: '7. 冬季防一氧化碳中毒',
+          mantra: '燃气热水器装室外，留缝通风防中毒',
+          doList: [
+            '燃气热水器必须安装在浴室外通风处，并规范安装通向室外的排烟管道。',
+            '冬季使用燃气、煤炉或炭火取暖时，窗户务必留出通风缝隙。',
+            '发现家人头晕、乏力、恶心，立即开窗并将其移至空气新鲜处，拨打 120。'
+          ],
+          dontList: [
+            '严禁在门窗紧闭的室内烧炭取暖或吃炭火锅。',
+            '不要继续使用直排式或超期服役（超过 8 年）的老旧热水器。'
+          ]
+        },
+
+        // --- 家庭急救 (5) ---
+        {
+          id: 'card-8',
+          category: '家庭急救',
+          badgeStyle: 'bg-emerald-100 text-emerald-800',
+          artKey: 'heimlich',
+          title: '8. 海姆立克急救法',
+          mantra: '剪刀石头布，肚脐上两指快速向内向上冲击',
+          doList: [
+            '站在卡喉者身后环抱腰部，让其身体略前倾、双脚分开站稳。',
+            '剪刀：一手握拳，拇指侧顶住肚脐上方两横指处；石头：另一手包住拳头。',
+            '布：快速用力向内、向上连续冲击腹部，直到异物排出。'
+          ],
+          dontList: [
+            '不要盲目用手伸进喉咙深处抠挖，容易把异物推得更深。',
+            '不要喂水或强吞馒头饭团试图“咽下去”，极易完全堵死气道。'
+          ]
+        },
+        {
+          id: 'card-9',
+          category: '家庭急救',
+          badgeStyle: 'bg-emerald-100 text-emerald-800',
+          artKey: 'scald-care',
+          title: '9. 烧烫伤五字诀',
+          mantra: '冲、脱、泡、盖、送，别涂牙膏酱油',
+          doList: [
+            '冲：立即用流动冷水（15~20℃）持续冲洗伤口 15~30 分钟降温。',
+            '脱与泡：在冷水中小心脱去或剪开衣物，继续冷泡 15 分钟缓解疼痛。',
+            '盖与送：用无菌纱布或干净棉布轻轻覆盖创面，面积较大立即送医。'
+          ],
+          dontList: [
+            '严禁涂抹牙膏、酱油、香油、草木灰！不仅阻碍散热还会引发严重感染。',
+            '不要用冰块直接冰敷创面，也不要自行挑破水泡。'
+          ]
+        },
+        {
+          id: 'card-10',
+          category: '家庭急救',
+          badgeStyle: 'bg-emerald-100 text-emerald-800',
+          artKey: 'nosebleed',
+          title: '10. 流鼻血正确处理',
+          mantra: '身体前倾捏鼻翼，切勿仰头塞纸团',
+          doList: [
+            '坐下并将头部略微前倾，张口呼吸，防止血液倒流入咽喉。',
+            '用拇指和食指紧捏两侧鼻翼（鼻梁下方软骨处）持续压迫 10 分钟。',
+            '可用冷毛巾敷在额头或后颈辅助血管收缩止血。'
+          ],
+          dontList: [
+            '切勿仰头！仰头只会让鼻血顺喉咙流进胃里引起恶心呕吐，甚至误入气管窒息。',
+            '不要用粗糙卫生纸团使劲塞进鼻孔，拔出时易再次撕裂黏膜出血。'
+          ]
+        },
+        {
+          id: 'card-11',
+          category: '家庭急救',
+          badgeStyle: 'bg-emerald-100 text-emerald-800',
+          artKey: 'cpr',
+          title: '11. 成人心肺复苏 CPR',
+          mantra: '胸外按压两乳连线中点，每分钟100-120次',
+          doList: [
+            '确认环境安全，轻拍双肩大声呼喊；无反应且无正常呼吸时，立即拨打 120 并取附近 AED。',
+            '让患者仰卧在硬质平面上，掌根重叠放于两乳头连线中点，双臂伸直垂直向下按压。',
+            '按压频率保持 100~120 次/分钟，按压深度 5~6 厘米，每次按压后让胸廓充分回弹。'
+          ],
+          dontList: [
+            '不要因不会人工呼吸而放弃施救，持续高质量胸外按压同样能维持脑部供血。',
+            '按压过程中肘部切勿弯曲，避免中断按压超过 10 秒。'
+          ]
+        },
+        {
+          id: 'card-12',
+          category: '家庭急救',
+          badgeStyle: 'bg-emerald-100 text-emerald-800',
+          artKey: 'drowning',
+          title: '12. 儿童防溺水与急救',
+          mantra: '黄金4分钟，清理口鼻先人工呼吸再按压',
+          doList: [
+            '看护儿童做到“有效看护”（不看手机、不离开视线），远离无护栏水池与河边。',
+            '救上岸后若无呼吸心跳，立即拨打 120，迅速清除口鼻内水草泥沙。',
+            '溺水急救遵循 A-B-C 顺序：先开放气道进行 2~5 次人工呼吸，再配合胸外按压。'
+          ],
+          dontList: [
+            '切勿采用“倒背跑步控水法”，控水不仅排不出肺里的水，还会延误最宝贵的黄金 4 分钟抢救时间！',
+            '儿童发现同伴落水切勿手拉手盲目下水营救，应大声呼救并抛投救生圈或长竹竿。'
+          ]
+        },
+
+        // --- 居家防护 (3) ---
+        {
+          id: 'card-13',
+          category: '居家防护',
+          badgeStyle: 'bg-amber-100 text-amber-800',
+          artKey: 'earthquake',
+          title: '13. 地震避险黄金三角',
+          mantra: '伏地、遮挡、手抓牢，护住头颈避开玻璃',
+          doList: [
+            '高层住户就近躲在承重墙墙角、内墙根或坚固书桌/餐桌下方。',
+            '蜷缩身体降低重心，用枕头、书包或双臂护住头部和后颈，一手抓牢桌腿。',
+            '主震结束后的安全间隙，立即关闭电源燃气，沿疏散楼梯有序撤离到空旷地带。'
+          ],
+          dontList: [
+            '严禁乘坐电梯逃生，也不要躲在玻璃窗、吊灯、高大衣柜或冰箱旁边。',
+            '切勿在阳台上停留或盲目跳楼。'
+          ]
+        },
+        {
+          id: 'card-14',
+          category: '居家防护',
+          badgeStyle: 'bg-amber-100 text-amber-800',
+          artKey: 'typhoon',
+          title: '14. 台风暴雨居家防护',
+          mantra: '收花盆关门窗，远离低洼和积水电线',
+          doList: [
+            '台风来临前，立即收回阳台上的花盆、衣架、杂物，防止高空坠物伤人。',
+            '大风玻璃窗可用宽胶带贴成“米”字形增强抗风性，关紧门窗，备好饮用水与手电。',
+            '强雷暴时拔掉电视、电脑等非必要电器插头。'
+          ],
+          dontList: [
+            '台风暴雨期间尽量减少外出，切勿在广告牌、大树或临时搭建物下避雨。',
+            '路面有积水时务必绕开路灯杆、配电箱和漩涡井盖，防止漏电或坠井。'
+          ]
+        },
+        {
+          id: 'card-15',
+          category: '居家防护',
+          badgeStyle: 'bg-amber-100 text-amber-800',
+          artKey: 'child-safety',
+          title: '15. 儿童防坠楼与误食',
+          mantra: '窗台不放垫脚物，药品洗涤剂高处锁好',
+          doList: [
+            '飘窗和阳台加装规范防护栏或限位器（开口宽度不超过 10 厘米）。',
+            '移走窗台和阳台护栏旁边的矮凳、沙发、收纳箱等可攀爬垫脚物。',
+            '成人药品、洁厕灵、洗衣凝珠、纽扣电池等全部收纳在高处带锁柜子内。'
+          ],
+          dontList: [
+            '千万不要用空矿泉水瓶或饮料瓶分装消毒液、农药或清洁剂，极易导致老人和孩子误饮！',
+            '切勿将幼儿独自反锁在家中。'
+          ]
+        }
+      ];
+
+      /* ===================================================================
+         4. 本地存储操作
+      =================================================================== */
+      function loadProfileFromStorage() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return Object.assign({}, DEFAULT_PROFILE);
+          return Object.assign({}, DEFAULT_PROFILE, JSON.parse(raw));
+        } catch (e) {
+          return Object.assign({}, DEFAULT_PROFILE);
+        }
+      }
+
+      function saveProfileToStorage(showNotification) {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(profileState));
+          const statusEl = document.getElementById('profile-save-status');
+          if (statusEl) {
+            statusEl.textContent = '✓ 已保存到本机浏览器，离线可用';
+          }
+          if (showNotification) {
+            showToast('家庭档案已保存到本机，离线可用');
+          }
+        } catch (e) {
+          showToast('当前环境存储受限，请勿开启无痕模式');
+        }
+      }
+
+      /* ===================================================================
+         5. 底部导航与分页切换
+      =================================================================== */
+      function switchTab(tabName) {
+        const validTabs = ['sos', 'script', 'profile', 'tips'];
+        if (!validTabs.includes(tabName)) return;
+
+        // 切换内容面板
+        validTabs.forEach(function (name) {
+          const panel = document.getElementById('tab-' + name);
+          const navBtn = document.getElementById('nav-' + name);
+          if (panel) {
+            if (name === tabName) {
+              panel.classList.remove('hidden');
+              panel.classList.add('panel-animate');
+            } else {
+              panel.classList.add('hidden');
+              panel.classList.remove('panel-animate');
+            }
+          }
+          if (navBtn) {
+            if (name === tabName) {
+              navBtn.classList.remove('text-slate-500', 'font-bold');
+              navBtn.classList.add('text-alarm-600', 'font-black');
+            } else {
+              navBtn.classList.remove('text-alarm-600', 'font-black');
+              navBtn.classList.add('text-slate-500', 'font-bold');
+            }
+          }
+        });
+
+        // 滚动回顶部
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      /* ===================================================================
+         6. 分页 1：实时定位抓取 & 预存地址渲染
+      =================================================================== */
+      function fetchGPSLocation() {
+        const statusTag = document.getElementById('gps-status-tag');
+        const detailText = document.getElementById('gps-detail-text');
+        const actionBar = document.getElementById('gps-action-bar');
+        const coordsDisplay = document.getElementById('gps-coords-display');
+        const btnLabel = document.getElementById('gps-btn-label');
+
+        if (!navigator.geolocation) {
+          statusTag.textContent = '设备不支持';
+          statusTag.className = 'px-2 py-0.5 rounded bg-rose-100 text-rose-700 font-extrabold';
+          detailText.textContent = '当前浏览器不支持 GPS 定位，请直接使用下方预存家庭地址或观察周围路牌。';
+          return;
+        }
+
+        btnLabel.textContent = '正在定位...';
+        statusTag.textContent = '获取中';
+        statusTag.className = 'px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-extrabold';
+
+        navigator.geolocation.getCurrentPosition(
+          function (pos) {
+            const lat = pos.coords.latitude.toFixed(6);
+            const lng = pos.coords.longitude.toFixed(6);
+            const acc = Math.round(pos.coords.accuracy || 0);
+            const mapUrl = 'https://uri.amap.com/marker?position=' + lng + ',' + lat + '&name=紧急求助位置';
+
+            gpsState = {
+              lat: lat,
+              lng: lng,
+              accuracy: acc,
+              coordText: '北纬 ' + lat + ', 东经 ' + lng + '（精度约 ' + acc + ' 米）',
+              mapUrl: mapUrl
+            };
+
+            btnLabel.textContent = '重新获取定位';
+            statusTag.textContent = '定位成功';
+            statusTag.className = 'px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-extrabold';
+            detailText.innerHTML = '已成功获取精确经纬度坐标！<br/><a href="' + mapUrl + '" target="_blank" rel="noopener" class="text-police-600 underline font-bold">点击在高德地图查看当前位置点 ↗</a>';
+            coordsDisplay.textContent = gpsState.coordText;
+            actionBar.classList.remove('hidden');
+
+            // 同步更新话术简报
+            updateGeneratedScripts();
+            showToast('已成功抓取当前 GPS 坐标');
+          },
+          function (err) {
+            btnLabel.textContent = '重试获取定位';
+            statusTag.textContent = '定位受限';
+            statusTag.className = 'px-2 py-0.5 rounded bg-rose-100 text-rose-700 font-extrabold';
+            let reason = '未能获取 GPS 信号，请检查手机定位权限是否开启，或直接使用下方预存家庭地址。';
+            if (err && err.code === 1) {
+              reason = '您拒绝了位置权限请求，请在浏览器设置中允许获取位置，或直接使用下方预存家庭地址。';
+            }
+            detailText.textContent = reason;
+            showToast('未获取到 GPS，可使用预存家庭地址');
+          },
+          { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        );
+      }
+
+      function renderSOSAddressCard() {
+        const box = document.getElementById('sos-saved-address-box');
+        if (!box) return;
+
+        const addr = profileState.address.trim();
+        const guide = profileState.guide.trim();
+
+        if (!addr && !guide) {
+          box.innerHTML = `
+            <p class="text-xs font-bold text-amber-900">尚未填写家庭地址档案</p>
+            <p class="text-[11px] text-amber-800">建议平时在「家庭档案」中预存详细楼栋门牌和消防车入口指引，关键时刻一键复制即用。</p>
+          `;
+        } else {
+          box.innerHTML = `
+            <div class="text-xs font-black text-slate-900 leading-snug">${escapeHtml(addr || '未填写门牌号')}</div>
+            ${guide ? `<div class="text-[11px] font-semibold text-amber-900 bg-white/80 rounded-lg px-2 py-1 border border-amber-200/70">🚑 入口指引：${escapeHtml(guide)}</div>` : ''}
+          `;
+        }
+      }
+
+      /* ===================================================================
+         7. 分页 2：报警话术生成器渲染与实时联动
+      =================================================================== */
+      function initScriptBuilder() {
+        // 渲染险情类型单选
+        const typeBox = document.getElementById('script-type-options');
+        if (typeBox) {
+          typeBox.innerHTML = INCIDENT_TYPES.map(function (item) {
+            const active = item.id === scriptState.typeId;
+            return `
+              <button type="button" data-action="select-incident-type" data-id="${item.id}"
+                class="btn-press py-2.5 px-3 rounded-xl border text-left text-xs font-extrabold transition flex items-center justify-between ${
+                  active
+                    ? 'bg-alarm-600 text-white border-alarm-600 shadow-sm'
+                    : 'bg-slate-50 text-slate-800 border-slate-200 hover:bg-slate-100'
+                }">
+                <span>${item.label}</span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded ${active ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600'}">${item.call}</span>
+              </button>
+            `;
+          }).join('');
+        }
+
+        // 渲染人员被困情况单选
+        const trappedBox = document.getElementById('script-trapped-options');
+        if (trappedBox) {
+          trappedBox.innerHTML = TRAPPED_OPTIONS.map(function (item) {
+            const active = item.id === scriptState.trappedId;
+            return `
+              <button type="button" data-action="select-trapped" data-id="${item.id}"
+                class="btn-press py-2 px-2.5 rounded-xl border text-xs font-extrabold transition text-center ${
+                  active
+                    ? 'bg-slate-900 text-white border-slate-900 shadow-sm'
+                    : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                }">
+                ${item.label}
+              </button>
+            `;
+          }).join('');
+        }
+
+        // 渲染风险特征多选标签
+        const featBox = document.getElementById('script-feature-options');
+        if (featBox) {
+          featBox.innerHTML = RISK_FEATURES.map(function (feat) {
+            const active = scriptState.features.includes(feat);
+            return `
+              <button type="button" data-action="toggle-feature" data-feat="${feat}"
+                class="btn-press px-3 py-1.5 rounded-full border text-xs font-extrabold transition ${
+                  active
+                    ? 'bg-fire-600 text-white border-fire-600 shadow-sm'
+                    : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
+                }">
+                ${active ? '✓ ' : '+ '}${feat}
+              </button>
+            `;
+          }).join('');
+        }
+
+        updateGeneratedScripts();
+      }
+
+      function updateGeneratedScripts() {
+        const addrInput = document.getElementById('script-address-input');
+        const detailInput = document.getElementById('script-detail-input');
+        const phoneInput = document.getElementById('script-phone-input');
+
+        const addrVal = (addrInput ? addrInput.value.trim() : '') || profileState.address.trim() || '【请补充具体区县/小区/楼栋门牌】';
+        const detailVal = detailInput ? detailInput.value.trim() : '';
+        const phoneVal = (phoneInput ? phoneInput.value.trim() : '') || profileState.c1Phone.trim() || '本机号码';
+
+        const typeObj = INCIDENT_TYPES.find(function (t) { return t.id === scriptState.typeId; }) || INCIDENT_TYPES[0];
+        const trappedObj = TRAPPED_OPTIONS.find(function (t) { return t.id === scriptState.trappedId; }) || TRAPPED_OPTIONS[0];
+
+        // 更新推荐拨打号码徽章与直拨链接
+        const badge = document.getElementById('script-target-phone-badge');
+        const callLink = document.getElementById('script-call-now-link');
+        if (badge) badge.textContent = '建议拨打：' + typeObj.call;
+        if (callLink) {
+          callLink.href = 'tel:' + typeObj.call;
+          callLink.textContent = '拨打 ' + typeObj.call;
+        }
+
+        // 拼接现场特征描述
+        const featText = scriptState.features.length > 0
+          ? '现场特征：' + scriptState.features.join('、') + '。'
+          : '';
+        const guideText = profileState.guide.trim() ? '入口指引：' + profileState.guide.trim() + '。' : '';
+        const extraText = detailVal ? '补充说明：' + detailVal + '。' : '';
+
+        // (A) 110/119/120 标准口播稿（地点 -> 险情 -> 被困情况 -> 风险特征 -> 联系人电话）
+        const spokenScript =
+          '你好，我要报警！' +
+          '【事发地点】在' + addrVal + '。' +
+          '【现场险情】' + typeObj.phrase + '，' + trappedObj.phrase + '。' +
+          (featText ? '【' + featText.replace('。', '】') + '。' : '') +
+          guideText +
+          extraText +
+          '【联系电话】' + phoneVal + '，保持畅通，请尽快派人救援！';
+
+        const spokenEl = document.getElementById('output-spoken-script');
+        if (spokenEl) spokenEl.textContent = spokenScript;
+
+        // (B) 家人/物业/安全员同步简报
+        const now = new Date();
+        const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+        const gpsLine = gpsState.coordText
+          ? '📍 GPS定位：' + gpsState.coordText + '\n🗺️ 地图链接：' + gpsState.mapUrl
+          : '📍 事发地址：' + addrVal;
+
+        const briefLines = [
+          '🚨【家庭紧急情况同步｜' + timeStr + '】',
+          '• 险情类型：' + typeObj.label.replace(/^[^\s]+\s/, '') + '（正在联系 ' + typeObj.call + '）',
+          '• 人员情况：' + trappedObj.phrase,
+          scriptState.features.length > 0 ? '• 风险特征：' + scriptState.features.join('、') : null,
+          gpsLine,
+          profileState.guide.trim() ? '• 救援入口：' + profileState.guide.trim() : null,
+          detailVal ? '• 补充说明：' + detailVal : null,
+          '• 联系电话：' + phoneVal + '（看到消息请速回电或前往路口接应救援车）'
+        ].filter(Boolean);
+
+        const briefEl = document.getElementById('output-family-brief');
+        if (briefEl) briefEl.textContent = briefLines.join('\n');
+      }
+
+      /* ===================================================================
+         8. 分页 3：家庭档案表单同步与导出
+      =================================================================== */
+      function populateProfileForm() {
+        const map = {
+          'prof-address': profileState.address,
+          'prof-guide': profileState.guide,
+          'prof-c1-name': profileState.c1Name,
+          'prof-c1-phone': profileState.c1Phone,
+          'prof-c2-name': profileState.c2Name,
+          'prof-c2-phone': profileState.c2Phone,
+          'prof-medical': profileState.medical
+        };
+
+        Object.keys(map).forEach(function (id) {
+          const el = document.getElementById(id);
+          if (el) el.value = map[id] || '';
+        });
+
+        // 如果话术页地址/电话为空，自动预填
+        const scriptAddr = document.getElementById('script-address-input');
+        if (scriptAddr && !scriptAddr.value && profileState.address) {
+          scriptAddr.value = profileState.address;
+        }
+        const scriptPhone = document.getElementById('script-phone-input');
+        if (scriptPhone && !scriptPhone.value && profileState.c1Phone) {
+          scriptPhone.value = profileState.c1Phone;
+        }
+
+        updateProfileDialLinks();
+        renderSOSAddressCard();
+      }
+
+      function updateProfileDialLinks() {
+        const c1Dial = document.getElementById('prof-c1-dial');
+        const c2Dial = document.getElementById('prof-c2-dial');
+        const p1 = (profileState.c1Phone || '').trim();
+        const p2 = (profileState.c2Phone || '').trim();
+
+        if (c1Dial) {
+          if (p1) {
+            c1Dial.href = 'tel:' + p1;
+            c1Dial.classList.remove('hidden');
+          } else {
+            c1Dial.classList.add('hidden');
+          }
+        }
+        if (c2Dial) {
+          if (p2) {
+            c2Dial.href = 'tel:' + p2;
+            c2Dial.classList.remove('hidden');
+          } else {
+            c2Dial.classList.add('hidden');
+          }
+        }
+      }
+
+      function handleProfileInputChange() {
+        profileState.address = (document.getElementById('prof-address').value || '');
+        profileState.guide = (document.getElementById('prof-guide').value || '');
+        profileState.c1Name = (document.getElementById('prof-c1-name').value || '');
+        profileState.c1Phone = (document.getElementById('prof-c1-phone').value || '');
+        profileState.c2Name = (document.getElementById('prof-c2-name').value || '');
+        profileState.c2Phone = (document.getElementById('prof-c2-phone').value || '');
+        profileState.medical = (document.getElementById('prof-medical').value || '');
+
+        saveProfileToStorage(false);
+        updateProfileDialLinks();
+        renderSOSAddressCard();
+        updateGeneratedScripts();
+      }
+
+      /* ===================================================================
+         9. 分页 4：15张绘本风安全图卡渲染与全屏海报弹窗
+      =================================================================== */
+      function renderTipsCards() {
+        const categories = ['全部', '火灾逃生', '燃气用电', '家庭急救', '居家防护'];
+        const filterBar = document.getElementById('tips-filter-bar');
+        const cardsList = document.getElementById('tips-cards-list');
+
+        if (filterBar) {
+          filterBar.innerHTML = categories.map(function (cat) {
+            const count = cat === '全部'
+              ? SAFETY_CARDS.length
+              : SAFETY_CARDS.filter(function (c) { return c.category === cat; }).length;
+            const active = cat === activeTipCategory;
+            return `
+              <button type="button" data-action="filter-tips" data-cat="${cat}"
+                class="btn-press shrink-0 px-3 py-1.5 rounded-full text-xs font-extrabold border transition ${
+                  active
+                    ? 'bg-slate-900 text-white border-slate-900 shadow-sm'
+                    : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
+                }">
+                ${cat}(${count})
+              </button>
+            `;
+          }).join('');
+        }
+
+        const filtered = activeTipCategory === '全部'
+          ? SAFETY_CARDS
+          : SAFETY_CARDS.filter(function (c) { return c.category === activeTipCategory; });
+
+        if (cardsList) {
+          cardsList.innerHTML = filtered.map(function (card) {
+            return `
+              <article class="storybook-card bg-white rounded-3xl border-2 border-slate-900/10 overflow-hidden flex flex-col">
+                <!-- 卡通插画头部（点击同样可触发大图海报） -->
+                <div data-action="open-poster" data-id="${card.id}" class="p-3 pb-0 cursor-pointer relative">
+                  <div class="rounded-2xl overflow-hidden border border-slate-200/80 relative">
+                    ${renderCartoonSVG(card.artKey)}
+                    <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full text-[11px] font-black shadow-sm ${card.badgeStyle}">
+                      ${card.category}
+                    </span>
+                    <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full bg-slate-900/75 text-white text-[10px] font-extrabold backdrop-blur-sm">
+                      🔍 点击放大
+                    </span>
+                  </div>
+                </div>
+
+                <!-- 卡片标题与核心口诀条 -->
+                <div class="px-4 pt-3 pb-2 space-y-1.5">
+                  <h3 class="text-base font-black text-slate-900 tracking-tight">${card.title}</h3>
+                  <div class="px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-xs font-black text-amber-900">
+                    💡 口诀：${card.mantra}
+                  </div>
+                </div>
+
+                <!-- 绿标正确做法 & 红标绝对禁忌 -->
+                <div class="px-4 pb-3 space-y-2">
+                  <div class="rounded-2xl bg-emerald-50/90 border border-emerald-200/80 p-2.5 space-y-1">
+                    <div class="text-[11px] font-black text-emerald-800">✅ 正确做法</div>
+                    <ul class="space-y-1 text-xs font-medium text-emerald-950 leading-relaxed">
+                      ${card.doList.map(function (line) {
+                        return '<li class="flex items-start gap-1.5"><span class="font-black text-emerald-600">•</span><span>' + line + '</span></li>';
+                      }).join('')}
+                    </ul>
+                  </div>
+
+                  <div class="rounded-2xl bg-rose-50/90 border border-rose-200/80 p-2.5 space-y-1">
+                    <div class="text-[11px] font-black text-rose-800">❌ 绝对禁忌</div>
+                    <ul class="space-y-1 text-xs font-medium text-rose-950 leading-relaxed">
+                      ${card.dontList.map(function (line) {
+                        return '<li class="flex items-start gap-1.5"><span class="font-black text-rose-600">•</span><span>' + line + '</span></li>';
+                      }).join('')}
+                    </ul>
+                  </div>
+                </div>
+
+                <!-- 底部双按钮：复制口诀 & 大图海报 -->
+                <div class="px-4 py-2.5 bg-slate-50 border-t border-slate-100 grid grid-cols-2 gap-2.5">
+                  <button type="button" data-action="copy-card-mantra" data-id="${card.id}" class="btn-press py-2 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold flex items-center justify-center gap-1">
+                    <span>📋 复制口诀</span>
+                  </button>
+                  <button type="button" data-action="open-poster" data-id="${card.id}" class="btn-press py-2 px-3 rounded-xl bg-white hover:bg-slate-100 text-slate-900 border border-slate-300 text-xs font-extrabold flex items-center justify-center gap-1">
+                    <span>🖼️ 大图海报</span>
+                  </button>
+                </div>
+              </article>
+            `;
+          }).join('');
+        }
+      }
+
+      function openPosterModal(cardId) {
+        const card = SAFETY_CARDS.find(function (c) { return c.id === cardId; });
+        if (!card) return;
+
+        const modal = document.getElementById('poster-modal');
+        const content = document.getElementById('poster-modal-content');
+        if (!modal || !content) return;
+
+        content.innerHTML = `
+          <div class="rounded-3xl bg-gradient-to-b from-amber-50/70 via-white to-slate-50 border-2 border-slate-200 p-3.5 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="px-3 py-1 rounded-full text-xs font-black ${card.badgeStyle}">${card.category}</span>
+              <span class="text-[11px] font-black text-slate-400">家庭安全科普长图</span>
+            </div>
+
+            <div class="rounded-2xl overflow-hidden border-2 border-slate-200/90 shadow-sm">
+              ${renderCartoonSVG(card.artKey)}
+            </div>
+
+            <div class="space-y-1.5">
+              <h3 class="text-xl font-black text-slate-900 tracking-tight">${card.title}</h3>
+              <div class="px-3 py-2 rounded-xl bg-amber-100/80 border border-amber-300 text-xs font-black text-amber-950">
+                💡 核心口诀：${card.mantra}
+              </div>
+            </div>
+
+            <div class="rounded-2xl bg-emerald-50 border border-emerald-200 p-3 space-y-1.5">
+              <div class="text-xs font-black text-emerald-800">✅ 正确做法</div>
+              <ul class="space-y-1.5 text-xs font-semibold text-emerald-950 leading-relaxed">
+                ${card.doList.map(function (line) {
+                  return '<li class="flex items-start gap-1.5"><span class="font-black text-emerald-600">•</span><span>' + line + '</span></li>';
+                }).join('')}
+              </ul>
+            </div>
+
+            <div class="rounded-2xl bg-rose-50 border border-rose-200 p-3 space-y-1.5">
+              <div class="text-xs font-black text-rose-800">❌ 绝对禁忌</div>
+              <ul class="space-y-1.5 text-xs font-semibold text-rose-950 leading-relaxed">
+                ${card.dontList.map(function (line) {
+                  return '<li class="flex items-start gap-1.5"><span class="font-black text-rose-600">•</span><span>' + line + '</span></li>';
+                }).join('')}
+              </ul>
+            </div>
+
+            <!-- 底部“家庭应急助手 SOS”印章水印 -->
+            <div class="pt-2 border-t border-dashed border-slate-300 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-6 h-6 rounded-lg bg-alarm-600 text-white text-[10px] font-black flex items-center justify-center">SOS</span>
+                <div>
+                  <div class="text-[11px] font-black text-slate-800">家庭应急助手 SOS</div>
+                  <div class="text-[10px] font-semibold text-slate-400">关键时刻不慌乱 · 转发守护家人安全</div>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded border-2 border-alarm-600/70 text-alarm-600 text-[10px] font-black -rotate-3">
+                家庭安全必备
+              </span>
+            </div>
+          </div>
+
+          <button type="button" data-action="copy-card-mantra" data-id="${card.id}" class="btn-press w-full py-3 rounded-2xl bg-alarm-600 hover:bg-alarm-500 text-white font-black text-xs shadow">
+            📋 一键复制本卡文字发微信群
+          </button>
+        `;
+
+        modal.classList.remove('modal-hidden');
+      }
+
+      function closePosterModal() {
+        const modal = document.getElementById('poster-modal');
+        if (modal) {
+          modal.classList.add('modal-hidden');
+        }
+      }
+
+      /* ===================================================================
+         10. 全局剪贴板复制与轻量 Toast 提示
+      =================================================================== */
+      function copyTextToClipboard(text, successMsg) {
+        const msg = successMsg || '已复制到剪贴板';
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.left = '-9999px';
+        textarea.style.top = '0';
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+
+        let ok = false;
+        try {
+          ok = document.execCommand('copy');
+        } catch (err) {
+          ok = false;
+        }
+        document.body.removeChild(textarea);
+
+        if (ok) {
+          showToast(msg);
+        } else if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(function () {
+            showToast(msg);
+          }).catch(function () {
+            showToast('复制受限，请长按文本手动复制');
+          });
+        } else {
+          showToast('复制受限，请长按文本手动复制');
+        }
+      }
+
+      let toastTimer = null;
+      function showToast(message) {
+        const box = document.getElementById('toast-box');
+        const msgEl = document.getElementById('toast-msg');
+        if (!box || !msgEl) return;
+
+        msgEl.textContent = message;
+        box.classList.remove('opacity-0', '-translate-y-2');
+        box.classList.add('opacity-100', 'translate-y-0');
+
+        if (toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () {
+          box.classList.remove('opacity-100', 'translate-y-0');
+          box.classList.add('opacity-0', '-translate-y-2');
+        }, 2200);
+      }
+
+      function escapeHtml(str) {
+        return String(str || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      /* ===================================================================
+         11. 全局事件委托（Event Delegation）—— 确保所有按钮 100% 响应
+      =================================================================== */
+      document.addEventListener('click', function (e) {
+        const target = e.target.closest('[data-action]');
+        if (!target) return;
+
+        const action = target.getAttribute('data-action');
+
+        switch (action) {
+          case 'switch-tab': {
+            const tab = target.getAttribute('data-tab');
+            switchTab(tab);
+            break;
+          }
+
+          case 'copy-text': {
+            const text = target.getAttribute('data-text') || '';
+            const msg = target.getAttribute('data-msg') || '已复制到剪贴板';
+            copyTextToClipboard(text, msg);
+            break;
+          }
+
+          case 'fetch-gps': {
+            fetchGPSLocation();
+            break;
+          }
+
+          case 'copy-gps': {
+            if (!gpsState.coordText) {
+              showToast('请先点击“一键获取定位”');
+              return;
+            }
+            const payload = '【当前紧急定位】' + gpsState.coordText + '\n地图坐标链接：' + gpsState.mapUrl;
+            copyTextToClipboard(payload, '已复制 GPS 坐标与地图链接');
+            break;
+          }
+
+          case 'copy-saved-address': {
+            const addr = profileState.address.trim();
+            const guide = profileState.guide.trim();
+            if (!addr && !guide) {
+              showToast('请先在“家庭档案”中填写家庭地址');
+              switchTab('profile');
+              return;
+            }
+            const full = '家庭地址：' + addr + (guide ? '\n救援入口指引：' + guide : '');
+            copyTextToClipboard(full, '已复制家庭地址与入口指引');
+            break;
+          }
+
+          case 'use-address-in-script': {
+            const scriptAddr = document.getElementById('script-address-input');
+            if (scriptAddr && profileState.address.trim()) {
+              scriptAddr.value = profileState.address.trim();
+            }
+            updateGeneratedScripts();
+            switchTab('script');
+            break;
+          }
+
+          case 'fill-script-address': {
+            if (!profileState.address.trim()) {
+              showToast('家庭档案暂未填写地址，请先前往填写');
+              return;
+            }
+            const scriptAddr = document.getElementById('script-address-input');
+            if (scriptAddr) {
+              scriptAddr.value = profileState.address.trim();
+              updateGeneratedScripts();
+              showToast('已填入家庭档案地址');
+            }
+            break;
+          }
+
+          case 'select-incident-type': {
+            scriptState.typeId = target.getAttribute('data-id') || 'fire';
+            initScriptBuilder();
+            break;
+          }
+
+          case 'select-trapped': {
+            scriptState.trappedId = target.getAttribute('data-id') || 'none';
+            initScriptBuilder();
+            break;
+          }
+
+          case 'toggle-feature': {
+            const feat = target.getAttribute('data-feat');
+            if (feat) {
+              const idx = scriptState.features.indexOf(feat);
+              if (idx > -1) {
+                scriptState.features.splice(idx, 1);
+              } else {
+                scriptState.features.push(feat);
+              }
+              initScriptBuilder();
+            }
+            break;
+          }
+
+          case 'copy-spoken-script': {
+            const el = document.getElementById('output-spoken-script');
+            if (el) copyTextToClipboard(el.textContent, '已复制标准口播稿，可照着念');
+            break;
+          }
+
+          case 'copy-family-brief': {
+            const el = document.getElementById('output-family-brief');
+            if (el) copyTextToClipboard(el.textContent, '已复制同步简报，可发微信群');
+            break;
+          }
+
+          case 'save-profile-explicit': {
+            handleProfileInputChange();
+            saveProfileToStorage(true);
+            break;
+          }
+
+          case 'export-profile-text': {
+            handleProfileInputChange();
+            const lines = [
+              '🏠【家庭应急档案卡】',
+              '• 详细地址：' + (profileState.address.trim() || '未填写'),
+              '• 入口指引：' + (profileState.guide.trim() || '未填写'),
+              '• 紧急联系人1：' + (profileState.c1Name.trim() || '未填写') + ' ' + (profileState.c1Phone.trim() || ''),
+              '• 紧急联系人2：' + (profileState.c2Name.trim() || '未填写') + ' ' + (profileState.c2Phone.trim() || ''),
+              '• 医疗/过敏备注：' + (profileState.medical.trim() || '无特殊备注')
+            ];
+            copyTextToClipboard(lines.join('\n'), '已复制完整家庭应急档案文本');
+            break;
+          }
+
+          case 'filter-tips': {
+            activeTipCategory = target.getAttribute('data-cat') || '全部';
+            renderTipsCards();
+            break;
+          }
+
+          case 'copy-card-mantra': {
+            const cardId = target.getAttribute('data-id');
+            const card = SAFETY_CARDS.find(function (c) { return c.id === cardId; });
+            if (card) {
+              const text = [
+                '【家庭安全常识｜' + card.title + '】',
+                '💡 核心口诀：' + card.mantra,
+                '✅ 正确做法：',
+                card.doList.map(function (d, i) { return (i + 1) + '. ' + d; }).join('\n'),
+                '❌ 绝对禁忌：',
+                card.dontList.map(function (d, i) { return (i + 1) + '. ' + d; }).join('\n')
+              ].join('\n');
+              copyTextToClipboard(text, '已复制科普口诀，可转发家庭群');
+            }
+            break;
+          }
+
+          case 'open-poster': {
+            const cardId = target.getAttribute('data-id');
+            openPosterModal(cardId);
+            break;
+          }
+
+          case 'close-modal': {
+            closePosterModal();
+            break;
+          }
+
+          case 'close-modal-backdrop': {
+            if (e.target === target) {
+              closePosterModal();
+            }
+            break;
+          }
+        }
+      });
+
+      /* ===================================================================
+         12. 初始化与输入事件绑定
+      =================================================================== */
+      function bootstrap() {
+        // 绑定家庭档案输入实时保存
+        const profileInputIds = [
+          'prof-address', 'prof-guide',
+          'prof-c1-name', 'prof-c1-phone',
+          'prof-c2-name', 'prof-c2-phone',
+          'prof-medical'
+        ];
+        profileInputIds.forEach(function (id) {
+          const el = document.getElementById(id);
+          if (el) {
+            el.addEventListener('input', handleProfileInputChange);
+          }
+        });
+
+        // 绑定报警话术文本输入实时更新
+        ['script-address-input', 'script-detail-input', 'script-phone-input'].forEach(function (id) {
+          const el = document.getElementById(id);
+          if (el) {
+            el.addEventListener('input', updateGeneratedScripts);
+          }
+        });
+
+        // ESC 键关闭弹窗
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape') {
+            closePosterModal();
+          }
+        });
+
+        // 初始化各模块视图
+        populateProfileForm();
+        initScriptBuilder();
+        renderTipsCards();
+        switchTab('sos');
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', bootstrap);
+      } else {
+        bootstrap();
+      }
+    })();
+  </script>
+</body>
+</html>
